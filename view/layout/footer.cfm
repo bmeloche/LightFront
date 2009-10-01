@@ -1,4 +1,4 @@
 </div><hr align="center" />
 <div align="center">
-	<h3>&copy; <cfoutput>#year(now())#</cfoutput> Brian Meloche</h3>
+	<h4><cfoutput>Lightfront Framework &copy;#year(now())# Brian Meloche - Current Version: #application.lfront.settings.lightfrontVersion#</cfoutput></h4>
 </div></body></html>
