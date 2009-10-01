@@ -6,8 +6,8 @@
 		<cfset var local = structNew() />
 		<cftry>
 			<!--- Load new Lightfront controllers, which will set controllers (cfcs and cfms), and views. --->
-			<cfset local = loadControllers() />
-			<cfreturn local />
+			<cfset local.controllers = loadControllers() />
+			<cfreturn local.controllers />
 			<cfcatch type="Any">
 				<cflog application="true" file="lightFrontException" type="error" text="loadLightFront(): #cfcatch.message# #cfcatch.detail#" />
 				<cfrethrow />
@@ -17,11 +17,13 @@
 
 	<cffunction name="loadSettings" access="public" returntype="struct" output="false" hint="I load the settings, and set any necessary defaults.">
 		<cfargument name="settings" type="struct" required="true" />
-		<cfparam name="arguments.settings.controllerPrefix" type="string" default="" />
-		<cfparam name="arguments.settings.controllerSuffix" type="string" default="" />
-		<cfparam name="arguments.settings.eventDelimiter" type="string" default="." />
-		<cfparam name="arguments.settings.eventVariable" type="string" default="do" />
-		<cfreturn arguments.settings />
+		<cfset local = structNew() />
+		<cfset local.settings = arguments.settings />
+		<cfparam name="local.settings.controllerPrefix" type="string" default="" />
+		<cfparam name="local.settings.controllerSuffix" type="string" default="" />
+		<cfparam name="local.settings.eventDelimiter" type="string" default="." />
+		<cfparam name="local.settings.eventVariable" type="string" default="do" />
+		<cfreturn local.settings />
 	</cffunction>
 
 	<cffunction name="loadControllers" access="public" returntype="struct" output="false" hint="I load the Lightfront controllers into the application.">
