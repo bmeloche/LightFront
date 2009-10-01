@@ -1,0 +1,41 @@
+body {
+	padding: 0px;
+	margin: 0px;
+	font-family: Arial, Helvetica, san-serif;
+}
+
+#header {
+	margin: 0px;
+}
+
+#header h1 {
+	margin: 0px;
+	background-color: #000080;
+	color: white;
+}
+
+#header #nav {
+	color: white;
+	background-color: #000040;
+	width: 100%;
+	height: 30px;
+}
+
+#header #nav a {
+	color: white;
+}
+
+#header #nav #menu {
+	float: left;
+	padding: 5px;
+}
+
+#header #nav #loginmenu {
+	float: right;
+	padding: 5px;
+}
+
+#content {
+	clear: both;
+	margin: 10px;
+}
