@@ -11,7 +11,7 @@
 	<li><a href="./?do=faq.callevent">What is callEvent()?</a></li>
 	<li><a href="./?do=faq.viewevents">How do I call views directly as events?</a></li>
 	<li><a href="./?do=faq.displayview">What is displayView()?</a></li>
-	<li><a href="./?do=relocate">What is relocate? Is that like &lt;cflocation&gt;?</a></li>
+	<li><a href="./?do=faq.relocate">What is relocate? Is that like &lt;cflocation&gt;?</a></li>
 	<li><a href="./?do=faq.ioc">What about LightFront and ColdSpring or Lightwire?</a></li>
 	<li><a href="./?do=faq.orm">What about LightFront and ORM, like Reactor, Transfer, DataMgr, DataFaucet and ColdFusion 9's Hibernate functionality?</a></li>
 	<li><a href="./?do=faq.fusebox">I see that LightFront can support switch controllers, like Fusebox 2 &amp; 3 had. Does this mean that LightFront is 100% Fusebox 3 compatible?</a></li>
