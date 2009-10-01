@@ -17,43 +17,43 @@
 
 	<cffunction name="loadSettings" access="public" returntype="struct" output="false" hint="I load the settings, and set any necessary defaults.">
 		<cfargument name="settings" type="struct" required="true" />
-		<cfset local = structNew() />
-		<cfset local.settings = arguments.settings />
-		<cfset local.settings.lightfrontVersion = "0.3.0" />
-		<cfparam name="local.settings.controllerPrefix" type="string" default="" />
-		<cfparam name="local.settings.controllerSuffix" type="string" default="" />
-		<cfparam name="local.settings.eventDelimiter" type="string" default="." />
-		<cfparam name="local.settings.eventVariable" type="string" default="do" />
-		<cfreturn local.settings />
+		<cfset var loc = structNew() />
+		<cfset loc.settings = arguments.settings />
+		<cfset loc.settings.lightfrontVersion = "0.3.0" />
+		<cfparam name="loc.settings.controllerPrefix" type="string" default="" />
+		<cfparam name="loc.settings.controllerSuffix" type="string" default="" />
+		<cfparam name="loc.settings.eventDelimiter" type="string" default="." />
+		<cfparam name="loc.settings.eventVariable" type="string" default="do" />
+		<cfreturn loc.settings />
 	</cffunction>
 
 	<cffunction name="loadControllers" access="public" returntype="struct" output="false" hint="I load the Lightfront controllers into the application.">
-		<cfset var local = structNew() />
+		<cfset var loc = structNew() />
 		<cftry>
 			<cfset setSettings() />
-			<cfset local.controllers = structNew() />
+			<cfset loc.controllers = structNew() />
 			<!--- Step 1: Load CFC Controllers. This is a convention. We assume all LightFront applications have a cfc-based controller. --->
-			<cfset local.expandedControllerPath = expandPath(settings.cfcControllerDirectory) />
-			<cfset application.lfront.settings.controllerPath = local.expandedControllerPath />
-			<cfset local.searchKey = iif(structKeyExists(settings,"controllerPrefix"),DE(settings.controllerPrefix),DE("")) & "*" & iif(structKeyExists(settings,"controllerSuffix"),DE(settings.controllerSuffix),DE("")) & ".cfc" />
-			<cfdirectory action="list" directory="#local.expandedControllerPath#" filter="#settings.controllerPrefix#*#settings.controllerSuffix#.cfc" name="local.controllerList" recurse="true" />
-			<cfloop query="local.controllerList">
-				<cfset local.temp = trim(replaceNoCase(local.controllerList.name,".cfc","")) />
-				<cfif local.temp NEQ "">
-					<cfset local.controllers[local.temp] = structNew() />
-					<cfset local.controllers[local.temp]["controllerType"] = "cfc" />
-					<cfset local.controllers[local.temp]["controller"] = createObject("component","controller.#local.temp#") />
+			<cfset loc.expandedControllerPath = expandPath(settings.cfcControllerDirectory) />
+			<cfset application.lfront.settings.controllerPath = loc.expandedControllerPath />
+			<cfset loc.searchKey = iif(structKeyExists(settings,"controllerPrefix"),DE(settings.controllerPrefix),DE("")) & "*" & iif(structKeyExists(settings,"controllerSuffix"),DE(settings.controllerSuffix),DE("")) & ".cfc" />
+			<cfdirectory action="list" directory="#loc.expandedControllerPath#" filter="#settings.controllerPrefix#*#settings.controllerSuffix#.cfc" name="loc.controllerList" recurse="true" />
+			<cfloop query="loc.controllerList">
+				<cfset loc.temp = trim(replaceNoCase(loc.controllerList.name,".cfc","")) />
+				<cfif loc.temp NEQ "">
+					<cfset loc.controllers[loc.temp] = structNew() />
+					<cfset loc.controllers[loc.temp]["controllerType"] = "cfc" />
+					<cfset loc.controllers[loc.temp]["controller"] = createObject("component","controller.#loc.temp#") />
 				</cfif>
 			</cfloop>
 			<!--- Step 2: Switch controllers (Fusebox 2/3 style). --->
 			<cfif structKeyExists(settings,"switch") AND structKeyExists(settings.switch,"switchRoot") AND structKeyExists(settings.switch,"switches")>
-				<cfloop collection="#settings.switch.switches#" item="local.temp">
-					<cfset local.controllers[local.temp] = structNew() />
-					<cfset local.controllers[local.temp]["controllerType"] = "switch" />
-					<cfset local.controllers[local.temp]["controller"] = settings.switch.switchRoot & settings.switch.switches[local.temp] & settings.switch.switchPage />
+				<cfloop collection="#settings.switch.switches#" item="loc.temp">
+					<cfset loc.controllers[loc.temp] = structNew() />
+					<cfset loc.controllers[loc.temp]["controllerType"] = "switch" />
+					<cfset loc.controllers[loc.temp]["controller"] = settings.switch.switchRoot & settings.switch.switches[loc.temp] & settings.switch.switchPage />
 				</cfloop>
 			</cfif>
-			<cfreturn local.controllers />
+			<cfreturn loc.controllers />
 			<cfcatch type="Any">
 				<cflog application="true" file="lightFrontException" type="error" text="loadControllers(): #cfcatch.message# #cfcatch.detail#" />
 				<cfrethrow />
@@ -63,7 +63,7 @@
 
 	<cffunction name="loadLightfrontRequest" access="public">
 		<cfargument name="requestVar" type="string" required="true" default="eventResult" />
-		<cfset var local = structNew() />
+		<cfset var loc = structNew() />
 		<cfset setSettings() />
 		<cfif NOT structKeyExists(request,"attributes")>
 			<!--- Create the LightFront request, if the request doesn't exist. An example would be if you are calling from a proxy. --->
@@ -108,8 +108,8 @@
 	<cffunction name="callEvent" access="public" returntype="any" output="true" hint="I invoke the event.">
 		<cfargument name="event" type="any" required="true" hint="" />
 		<cfargument name="args" type="struct" required="false" hint="use to pass in arguments to an event" />
-		<cfset var local = structNew() />
-		<cfset local.temp = "" />
+		<cfset var loc = structNew() />
+		<cfset loc.temp = "" />
 		<cfset request.attributes.class = listFirst(arguments.event,getSetting("eventDelimiter")) />
 		<cfset request.attributes.method = listLast(arguments.event,getSetting("eventDelimiter")) />
 		<cfif (structKeyExists(application.lfront.settings,"assignments") AND structKeyExists(application.lfront.settings.assignments,request.attributes.class))>
@@ -117,33 +117,33 @@
 			<cfset request.attributes.class = application.lfront.settings.assignments[request.attributes.origclass] />
 		</cfif>
 		<cfif structKeyExists(application.lfront.ctrl,request.attributes.class)>
-			<cfset local.controller = getController(request.attributes.class) />
-			<cfif local.controller.controllerType IS "cfc">
-				<cfinvoke component="#local.controller.controller#" method="#request.attributes.method#" returnvariable="local.temp">
+			<cfset loc.controller = getController(request.attributes.class) />
+			<cfif loc.controller.controllerType IS "cfc">
+				<cfinvoke component="#loc.controller.controller#" method="#request.attributes.method#" returnvariable="loc.temp">
 					<cfif structKeyExists(arguments,"args")>
 						<cfinvokeargument name="args" value="#arguments.args#" />
 					</cfif>
 				</cfinvoke>
-			<cfelseif local.controller.controllerType IS "switch">
+			<cfelseif loc.controller.controllerType IS "switch">
 				<cfset request.attributes[uCase(application.lfront.settings.switch.switchVariable)] = request.attributes.method />
 				<cfset variables.attributes = request.attributes />
-				<cfsavecontent variable="local.temp">
+				<cfsavecontent variable="loc.temp">
 					<cftry>
-						<cfinclude template="#local.controller.controller#" />
+						<cfinclude template="#loc.controller.controller#" />
 						<cfcatch type="any">
 							<cfrethrow />
 						</cfcatch>
 					</cftry>
 				</cfsavecontent>
 			<cfelse>
-				<cfthrow message="Controller Type #local.controller.controllerType# is not recognized." />
+				<cfthrow message="Controller Type #loc.controller.controllerType# is not recognized." />
 			</cfif>
 		<cfelse>
-			<cfsavecontent variable="local.temp">#displayView(request.attributes.class & "." & request.attributes.method)#</cfsavecontent>
+			<cfsavecontent variable="loc.temp">#displayView(request.attributes.class & "." & request.attributes.method)#</cfsavecontent>
 		</cfif>
 		<cfset request.eventCounter = request.eventCounter + 1 />
-		<cfif isDefined("local.temp")>
-			<cfreturn local.temp />
+		<cfif isDefined("loc.temp")>
+			<cfreturn loc.temp />
 		<cfelse>
 			<cfreturn "" />
 		</cfif>
@@ -152,23 +152,23 @@
 	<cffunction name="displayView" access="public" returntype="string" output="false" hint="I display views.">
 		<cfargument name="viewName" type="string" required="true" />
 		<cfargument name="content" type="any" required="false" hint="Use this if you want to pass content to the view." />
-		<cfset var local = structNew() />
+		<cfset var loc = structNew() />
 		<cfset arguments.viewName = replaceNoCase(arguments.viewName,getSetting('eventDelimiter'),"/","ALL") />
-		<cfset local.viewFile = arguments.viewName & ".cfm" />
-		<cfset local.viewName = getSetting("viewDirectory") & local.viewFile />
-		<cfif FileExists(ExpandPath(local.viewName))>
-			<cfsavecontent variable="local.renderedView"><cfinclude template="#local.viewName#" /></cfsavecontent>
+		<cfset loc.viewFile = arguments.viewName & ".cfm" />
+		<cfset loc.viewName = getSetting("viewDirectory") & loc.viewFile />
+		<cfif FileExists(ExpandPath(loc.viewName))>
+			<cfsavecontent variable="loc.renderedView"><cfinclude template="#loc.viewName#" /></cfsavecontent>
 		<cfelse>
-			<cfset local.switchName = getSetting("viewDirectory") & replace(arguments.viewName,listLast(arguments.viewName,"/"),"") & application.lfront.settings.switch.switchPage />
-			<cfif FileExists(ExpandPath(local.switchName))>
+			<cfset loc.switchName = getSetting("viewDirectory") & replace(arguments.viewName,listLast(arguments.viewName,"/"),"") & application.lfront.settings.switch.switchPage />
+			<cfif FileExists(ExpandPath(loc.switchName))>
 				<cfset request.attributes[uCase(settings.switch.switchVariable)] = listLast(arguments.viewName,"/") />
 				<cfset variables.attributes = request.attributes />
-				<cfsavecontent variable="local.renderedView"><cfinclude template="#local.switchName#" /></cfsavecontent>
+				<cfsavecontent variable="loc.renderedView"><cfinclude template="#loc.switchName#" /></cfsavecontent>
 			<cfelse>
-				<cfsavecontent variable="local.renderedView">Error: #arguments.viewName# is not found! Looking for #local.viewName#.</cfsavecontent>
+				<cfsavecontent variable="loc.renderedView">Error: #arguments.viewName# is not found! Looking for #loc.viewName#.</cfsavecontent>
 			</cfif>
 		</cfif>
-		<cfreturn local.renderedView />
+		<cfreturn loc.renderedView />
 	</cffunction>
 
 	<cffunction name="relocate" access="public" returntype="string" output="false" hint="I redirect to another event.">

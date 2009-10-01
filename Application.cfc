@@ -42,7 +42,7 @@
 
 	<cffunction name="onRequestStart" returntype="boolean" access="public" output="true" hint="I run before any non-remote calls.">
 		<cfargument name="targetPage" type="string" required="true" />
-		<cfset var local = structNew() />
+		<cfset var loc = structNew() />
 		<cfset request.attributes = structNew() />
 		<cfset request.eventResult = "" />
 		<!--- Check to see if a reinit has been requested. --->
@@ -93,42 +93,42 @@
 	<cffunction name="getSettingsForLightFront" access="private" returntype="struct" hint="I set LightFront settings.">
 		<cfscript>
 			//LightFront settings set here, loaded in onApplicationStart().
-			var local = structNew();
-			local.startupTimeout = 60;
-			local.cfcControllerDirectory = "./controller/";
-			local.controllerPrefix = ""; //eg. prefix = "lf": class = home, controller = lfhome.cfc.
-			local.controllerSuffix = ""; //eg. suffix = "controller": class = home, controller = homecontroller.cfc.
-			local.viewDirectory = "./view/";
-			//local.modelDirectory = "/model/";
-			local.eventVariable = "do"; // eg. index.cfm?do=home.welcome; event = do; class = home; method = welcome;
-			local.eventDelimiter = ".";
-			local.classVariable = "section";
-			local.methodVariable = "action"; //this is also used for switch/Fusebox 2-3 style controllers.
-			local.methodSwitch = true;
-			local.defaultClass = "home"; //used if no classes are defined.
-			local.defaultMethod = "welcome";
-			local.defaultEvent = local.defaultClass & local.eventDelimiter & local.defaultMethod;
-			local.defaultPage = "index.cfm"; //the default page for the controller. It is possible to allow any page to access LightFront if you choose, though it's not recommended.
-			local.formURLPrecedence = "form"; //"form" or "URL". If you set to URL, url variables will overwrite form variables.
-			local.lightfrontRoot = true;
-			local.preEvent = "layout.header";
-			local.postEvent = "layout.footer";
-			local.reload = "reload";
-			local.reloadpassword = "true";
+			var loc = structNew();
+			loc.startupTimeout = 60;
+			loc.cfcControllerDirectory = "./controller/";
+			loc.controllerPrefix = ""; //eg. prefix = "lf": class = home, controller = lfhome.cfc.
+			loc.controllerSuffix = ""; //eg. suffix = "controller": class = home, controller = homecontroller.cfc.
+			loc.viewDirectory = "./view/";
+			//loc.modelDirectory = "/model/";
+			loc.eventVariable = "do"; // eg. index.cfm?do=home.welcome; event = do; class = home; method = welcome;
+			loc.eventDelimiter = ".";
+			loc.classVariable = "section";
+			loc.methodVariable = "action"; //this is also used for switch/Fusebox 2-3 style controllers.
+			loc.methodSwitch = true;
+			loc.defaultClass = "home"; //used if no classes are defined.
+			loc.defaultMethod = "welcome";
+			loc.defaultEvent = loc.defaultClass & loc.eventDelimiter & loc.defaultMethod;
+			loc.defaultPage = "index.cfm"; //the default page for the controller. It is possible to allow any page to access LightFront if you choose, though it's not recommended.
+			loc.formURLPrecedence = "form"; //"form" or "URL". If you set to URL, url variables will overwrite form variables.
+			loc.lightfrontRoot = true;
+			loc.preEvent = "layout.header";
+			loc.postEvent = "layout.footer";
+			loc.reload = "reload";
+			loc.reloadpassword = "true";
 			//Assignments - Assign a class to a controller/switch, if you want to allow assignments, particularly useful if you want a single controller.
 			//If you are using the controller prefix/suffix, set up assignment post prefix/suffix.
 			//This is similar to defining circuits in Fusebox.
-			local.assignments = structNew();
-			//local.assignments.home = "controller"; // eg. admin.login = home.admin_login;
+			loc.assignments = structNew();
+			//loc.assignments.home = "controller"; // eg. admin.login = home.admin_login;
 			//Switches - If you have switches (Fusebox 2-3 style controllers, represent them here, much like you would in a fusebox.init.cfm.
-			local.switch = structNew();
-			local.switch.switchVariable = "fuseaction";
-			local.switch.switchPage = "switch.cfm";
-			local.switch.switchRoot = "./controller/switch/";
-			local.switch.switches = structNew();
-			local.switch.switches.switch = "";
-			local.switch.switches.test = "test/";
-			return local;
+			loc.switch = structNew();
+			loc.switch.switchVariable = "fuseaction";
+			loc.switch.switchPage = "switch.cfm";
+			loc.switch.switchRoot = "./controller/switch/";
+			loc.switch.switches = structNew();
+			loc.switch.switches.switch = "";
+			loc.switch.switches.test = "test/";
+			return loc;
 		</cfscript>
 	</cffunction>
 
