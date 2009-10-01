@@ -1,7 +1,7 @@
 <cfoutput>
 <html>
 	<head>
-		<title>The Lightfront Framework</title>
+		<title>The LightFront Framework</title>
 		<link rel="stylesheet" href="assets/css/style.css" />
 	</head>
 <body>

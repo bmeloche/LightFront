@@ -1,7 +1,7 @@
 <h2>What is callEvent()?</h2>
 <table border="1" cellpadding="5">
 	<tr>
-		<th colspan="3">callEvent()</th>
+		<th colspan="4">callEvent()</th>
 	</tr>
 	<tr valign="top">
 		<th>Argument</th>
