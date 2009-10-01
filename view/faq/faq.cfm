@@ -14,4 +14,6 @@
 	<li><a href="./?do=faq.viewevents">How do I call views directly as events?</a></li>
 	<li><a href="./?do=faq.viewconventions">Are views an example of conventions?</a></li>
 	<li><a href="./?do=faq.nohub">I don't like all of my pages going through index.cfm or whatever I've called the default cfm page. Can I still use LightFront?</a></li>
+	<li><a href="lightfront.zip">Download the zip file.</a></li>
+	<li><a href="http://svn.lightfront.org/svn/lightfront">Browse the LightFront repository</a></li>
 </ul>
