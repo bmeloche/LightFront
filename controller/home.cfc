@@ -16,7 +16,7 @@
 				</cfif>
 			</cfoutput>
 		</cfsavecontent>
-		<cfreturn displayView("home.welcome",loc) />
+		<cfreturn displayView("welcome",loc) />
 	</cffunction>
 
 	<cffunction name="hello" returntype="string" output="true">

@@ -8,15 +8,15 @@
 	<fieldset>
 		<table>
 			<tr>
-				<td colspan="2"><p>Put anything for the username. Password=password.</p></td>
+				<td colspan="2"><p>Put anything in for the username. Password = password.</p></td>
 			</tr>
 			<tr>
-				<td>Username: </td>
-				<td><input name="username" type="text"></td>
+				<td>Username:</td>
+				<td><input name="username" type="password" /></td>
 			</tr>
 			<tr>
 				<td>Password:</td>
-				<td><input name="password" type="text"></td>
+				<td><input name="password" type="password" /></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
