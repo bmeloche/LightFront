@@ -1,4 +1,4 @@
-<cfcomponent displayname="Application" extends="lightfront" output="false" hint="I am the Application CFC. I am tied to Lightfront.">
+<cfcomponent displayname="Application" extends="org.lightfront.lightfront" output="false" hint="I am the Application CFC. I am tied to Lightfront.">
 	<cfscript>
 		//Set the application properties. Customize to meet your needs.
 		this.name = "lightfront_" & hash(getCurrentTemplatePath());
@@ -7,8 +7,9 @@
 		this.sessionTimeout = createTimeSpan(0,0,30,0);
 		this.cookieManagement = true;
 		this.setClientCookies = false;
-		this.mappings["lightfront"] = expandPath("./");
+		this.mappings["/"] = expandPath("./");
 		this.mappings["controller"] = expandPath("./controller");
+		this.mappings["view"] = expandPath("./view");
 	</cfscript>
 
 	<!--- PUBLIC FUNCTIONS --->
@@ -95,10 +96,10 @@
 			//LightFront settings set here, loaded in onApplicationStart().
 			var loc = structNew();
 			loc.startupTimeout = 60;
-			loc.cfcControllerDirectory = "./controller/";
+			loc.cfcControllerDirectory = "/controller/";
 			loc.controllerPrefix = ""; //eg. prefix = "lf": class = home, controller = lfhome.cfc.
 			loc.controllerSuffix = ""; //eg. suffix = "controller": class = home, controller = homecontroller.cfc.
-			loc.viewDirectory = "./view/";
+			loc.viewDirectory = "/view/";
 			//loc.modelDirectory = "/model/";
 			loc.eventVariable = "do"; // eg. index.cfm?do=home.welcome; event = do; class = home; method = welcome;
 			loc.eventDelimiter = ".";
@@ -124,7 +125,7 @@
 			loc.switch = structNew();
 			loc.switch.switchVariable = "fuseaction";
 			loc.switch.switchPage = "switch.cfm";
-			loc.switch.switchRoot = "./controller/switch/";
+			loc.switch.switchRoot = "/controller/switch/";
 			loc.switch.switches = structNew();
 			loc.switch.switches.switch = "";
 			loc.switch.switches.test = "test/";

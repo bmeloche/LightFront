@@ -1,4 +1,4 @@
-<cfcomponent displayname="home" extends="lightfront" output="false" hint="home controller">
+<cfcomponent displayname="home" extends="org.lightfront.lightfront" output="false" hint="home controller">
 
 	<cffunction name="init" returntype="string" output="true">
 		<cfreturn welcome() />

@@ -5,6 +5,7 @@
 	<li><a href="./?do=faq.features">What are LightFront's features?</a></li>
 	<li><a href="./?do=faq.different">How is LightFront different than other MVC frameworks?</a></li>
 	<li><a href="./?do=faq.flexcon">What are &quot;Flexible Conventions&quot;? Why do I care?</a></li>
+	<li><a href="./?do=faq.installation">How do I install LightFront?</a></li>
 	<li><a href="./?do=faq.configuration">What do I need to configure in LightFront? Where? How?</a></li>
 	<li><a href="./?do=faq.functions">Some frameworks require you to know a lot of extras to use them. What functions or commands do I need to learn for LightFront?</a></li>
 	<li><a href="./?do=faq.events">How do I define my events?</a></li>
@@ -19,4 +20,5 @@
 	<li><a href="./?do=faq.nohub">I don't like all of my pages going through index.cfm or whatever I've called the default cfm page. Can I still use LightFront?</a></li>
 	<li><a href="lightfront.zip">Download the zip file.</a></li>
 	<li><a href="http://svn.lightfront.org/svn/lightfront">Browse the LightFront repository</a></li>
+	<li><a href="http://twitter.com/lightfront">Follow the LightFront Framework on Twitter!</a></li>
 </ul>

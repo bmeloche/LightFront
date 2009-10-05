@@ -2,6 +2,7 @@ body {
 	padding: 0px;
 	margin: 0px;
 	font-family: Arial, Helvetica, san-serif;
+	font-size: 11pt;
 }
 
 #header {
@@ -38,4 +39,29 @@ body {
 #content {
 	clear: both;
 	margin: 10px;
+}
+
+#main_left {
+	float: left;
+	min-width: 800px;
+	width: 83%;
+}
+
+#main_right {
+	float: right;
+	width: 13%;
+	padding: 10px;
+	background-color: #DDF;
+	margin: 2px;
+	border: 2px solid black;
+}
+
+#main_right ul {
+	font-size: small;
+	padding: 0px 15px;
+}
+
+#main_right ul li {
+	/*margin: 2px 0px;*/
+	padding: 0px 2px;
 }

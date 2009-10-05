@@ -1,4 +1,4 @@
-<cfcomponent displayname="employee" hint="The employee CFC" extends="lightfront" output="true">
+<cfcomponent displayname="employee" hint="The employee CFC" extends="org.lightfront.lightfront" output="true">
 
 	<cffunction name="getEmployee" access="package" hint="I get the employee." output="true" returntype="string">
 		<cfargument name="args" type="struct" required="false" />

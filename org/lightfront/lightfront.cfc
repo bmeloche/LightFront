@@ -19,7 +19,7 @@
 		<cfargument name="settings" type="struct" required="true" />
 		<cfset var loc = structNew() />
 		<cfset loc.settings = arguments.settings />
-		<cfset loc.settings.lightfrontVersion = "0.3.0" />
+		<cfset loc.settings.lightfrontVersion = "0.3.1" />
 		<cfparam name="loc.settings.controllerPrefix" type="string" default="" />
 		<cfparam name="loc.settings.controllerSuffix" type="string" default="" />
 		<cfparam name="loc.settings.eventDelimiter" type="string" default="." />

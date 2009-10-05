@@ -1,0 +1,6 @@
+<h2>What about LightFront and ColdSpring or Lightwire?</h2>
+<p>LightFront doesn't require <a href="http://www.coldspringframework.org/">ColdSpring</a> or <a href="http://lightwire.riaforge.org/">Lightwire</a> but you should have no problem using either of them with LightFront.</p>
+<p>Because LightFront automatically places your controller cfc's in the application scope, you do not have to define them in your ColdSpring or Lightwire configuration.</p>
+<p>If you've never used <a href="http://www.coldspringframework.org/">ColdSpring</a> or <a href="http://lightwire.riaforge.org/">Lightwire</a> in your model, we suggest you check one of them out. They really do make your model simpler, especially as your application grows.</p>
+<p>By version 0.5, LightFront will expand these documents and provide sample applications for each inversion of control/dependency injection (IOC/DI) framework.</p>
+<p>Remember, LightFront is a front controller-based framework. Because ColdSpring and Lightwire primarily deal with your model, LightFront doesn't care whether you use one or not.</p>
