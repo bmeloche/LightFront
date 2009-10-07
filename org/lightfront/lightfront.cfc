@@ -19,11 +19,16 @@
 		<cfargument name="settings" type="struct" required="true" />
 		<cfset var loc = structNew() />
 		<cfset loc.settings = arguments.settings />
-		<cfset loc.settings.lightfrontVersion = "0.3.1" />
+		<cfset loc.settings.lightfrontVersion = "0.3.2" />
+		<cfparam name="loc.settings.startupTimeout" type="numeric" default="60" />
+		<cfparam name="loc.settings.cfcControllerDirectory" type="string" default="/controller/" />
+		<cfparam name="loc.settings.viewDirectory" type="string" default="/view/" />
 		<cfparam name="loc.settings.controllerPrefix" type="string" default="" />
 		<cfparam name="loc.settings.controllerSuffix" type="string" default="" />
 		<cfparam name="loc.settings.eventDelimiter" type="string" default="." />
 		<cfparam name="loc.settings.eventVariable" type="string" default="do" />
+		<cfparam name="loc.settings.defaultPage" type="string" default="index.cfm" />
+		<cfparam name="loc.settings.viewExtension" type="string" default=".cfm" />
 		<cfreturn loc.settings />
 	</cffunction>
 
@@ -154,7 +159,7 @@
 		<cfargument name="content" type="any" required="false" hint="Use this if you want to pass content to the view." />
 		<cfset var loc = structNew() />
 		<cfset arguments.viewName = replaceNoCase(arguments.viewName,getSetting('eventDelimiter'),"/","ALL") />
-		<cfset loc.viewFile = arguments.viewName & ".cfm" />
+		<cfset loc.viewFile = arguments.viewName & getSetting('viewExtension') />
 		<cfset loc.viewName = getSetting("viewDirectory") & loc.viewFile />
 		<cfif FileExists(ExpandPath(loc.viewName))>
 			<cfsavecontent variable="loc.renderedView"><cfinclude template="#loc.viewName#" /></cfsavecontent>
