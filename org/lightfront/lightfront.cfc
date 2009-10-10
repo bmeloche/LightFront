@@ -17,19 +17,24 @@
 
 	<cffunction name="loadSettings" access="public" returntype="struct" output="false" hint="I load the settings, and set any necessary defaults.">
 		<cfargument name="settings" type="struct" required="true" />
-		<cfset var loc = structNew() />
-		<cfset loc.settings = arguments.settings />
-		<cfset loc.settings.lightfrontVersion = "0.3.2" />
-		<cfparam name="loc.settings.startupTimeout" type="numeric" default="60" />
-		<cfparam name="loc.settings.cfcControllerDirectory" type="string" default="/controller/" />
-		<cfparam name="loc.settings.viewDirectory" type="string" default="/view/" />
-		<cfparam name="loc.settings.controllerPrefix" type="string" default="" />
-		<cfparam name="loc.settings.controllerSuffix" type="string" default="" />
-		<cfparam name="loc.settings.eventDelimiter" type="string" default="." />
-		<cfparam name="loc.settings.eventVariable" type="string" default="do" />
-		<cfparam name="loc.settings.defaultPage" type="string" default="index.cfm" />
-		<cfparam name="loc.settings.viewExtension" type="string" default=".cfm" />
-		<cfreturn loc.settings />
+		<cfset var lfs = structNew() />
+		<cfset lfs.settings = arguments.settings />
+		<cfset lfs.settings.lightfrontVersion = "0.3.4" />
+		<cfparam name="lfs.settings.startupTimeout" type="numeric" default="60" />
+		<cfparam name="lfs.settings.reload" type="string" default="reload" />
+		<cfparam name="lfs.settings.reloadpassword" type="string" default="true" />
+		<cfparam name="lfs.settings.cfcControllerDirectory" type="string" default="/lf/controller/" />
+		<cfparam name="lfs.settings.viewDirectory" type="string" default="/lf/view/" />
+		<cfparam name="lfs.settings.controllerPrefix" type="string" default="" />
+		<cfparam name="lfs.settings.controllerSuffix" type="string" default="" />
+		<cfparam name="lfs.settings.defaultClass" type="string" default="home" />
+		<cfparam name="lfs.settings.defaultMethod" type="string" default="home" />
+		<cfparam name="lfs.settings.eventDelimiter" type="string" default="." />
+		<cfparam name="lfs.settings.eventVariable" type="string" default="do" />
+		<cfparam name="lfs.settings.defaultPage" type="string" default="index.cfm" />
+		<cfparam name="lfs.settings.viewExtension" type="string" default=".cfm" />
+		<cfset lfs.settings.defaultEvent = lfs.settings.defaultClass & lfs.settings.eventDelimiter & lfs.settings.defaultMethod />
+		<cfreturn lfs.settings />
 	</cffunction>
 
 	<cffunction name="loadControllers" access="public" returntype="struct" output="false" hint="I load the Lightfront controllers into the application.">
@@ -38,16 +43,14 @@
 			<cfset setSettings() />
 			<cfset loc.controllers = structNew() />
 			<!--- Step 1: Load CFC Controllers. This is a convention. We assume all LightFront applications have a cfc-based controller. --->
-			<cfset loc.expandedControllerPath = expandPath(settings.cfcControllerDirectory) />
-			<cfset application.lfront.settings.controllerPath = loc.expandedControllerPath />
 			<cfset loc.searchKey = iif(structKeyExists(settings,"controllerPrefix"),DE(settings.controllerPrefix),DE("")) & "*" & iif(structKeyExists(settings,"controllerSuffix"),DE(settings.controllerSuffix),DE("")) & ".cfc" />
-			<cfdirectory action="list" directory="#loc.expandedControllerPath#" filter="#settings.controllerPrefix#*#settings.controllerSuffix#.cfc" name="loc.controllerList" recurse="true" />
+			<cfdirectory action="list" directory="#expandPath(settings.cfcControllerDirectory)#" filter="#settings.controllerPrefix#*#settings.controllerSuffix#.cfc" name="loc.controllerList" recurse="true" />
 			<cfloop query="loc.controllerList">
 				<cfset loc.temp = trim(replaceNoCase(loc.controllerList.name,".cfc","")) />
 				<cfif loc.temp NEQ "">
 					<cfset loc.controllers[loc.temp] = structNew() />
 					<cfset loc.controllers[loc.temp]["controllerType"] = "cfc" />
-					<cfset loc.controllers[loc.temp]["controller"] = createObject("component","controller.#loc.temp#") />
+					<cfset loc.controllers[loc.temp]["controller"] = createObject("component","lf.controller.#loc.temp#") />
 				</cfif>
 			</cfloop>
 			<!--- Step 2: Switch controllers (Fusebox 2/3 style). --->
@@ -161,9 +164,10 @@
 		<cfset arguments.viewName = replaceNoCase(arguments.viewName,getSetting('eventDelimiter'),"/","ALL") />
 		<cfset loc.viewFile = arguments.viewName & getSetting('viewExtension') />
 		<cfset loc.viewName = getSetting("viewDirectory") & loc.viewFile />
+		<cfset loc.renderedView = "" />
 		<cfif FileExists(ExpandPath(loc.viewName))>
 			<cfsavecontent variable="loc.renderedView"><cfinclude template="#loc.viewName#" /></cfsavecontent>
-		<cfelse>
+		<cfelseif structKeyExists(application.lfront.settings,"assignments") AND structKeyExists(application.lfront.settings,"switch") AND structKeyExists(application.lfront.settings.switch,"switchPage")>
 			<cfset loc.switchName = getSetting("viewDirectory") & replace(arguments.viewName,listLast(arguments.viewName,"/"),"") & application.lfront.settings.switch.switchPage />
 			<cfif FileExists(ExpandPath(loc.switchName))>
 				<cfset request.attributes[uCase(settings.switch.switchVariable)] = listLast(arguments.viewName,"/") />
