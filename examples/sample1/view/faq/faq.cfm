@@ -18,7 +18,7 @@
 	<li><a href="./?do=faq.fusebox">I see that LightFront can support switch controllers, like Fusebox 2 &amp; 3 had. Does this mean that LightFront is 100% Fusebox 3 compatible?</a></li>
 	<li><a href="./?do=faq.viewconventions">Are views an example of conventions?</a></li>
 	<li><a href="./?do=faq.nohub">I don't like all of my pages going through index.cfm or whatever I've called the default cfm page. Can I still use LightFront?</a></li>
-	<li><a href="lightfront.zip">Download the zip file.</a></li>
+	<li><a href="downloads/lightfront.zip">Download the zip file.</a></li>
 	<li><a href="http://svn.lightfront.org/svn/lightfront">Browse the LightFront repository</a></li>
 	<li><a href="http://twitter.com/lightfront">Follow the LightFront Framework on Twitter!</a></li>
 </ul>
