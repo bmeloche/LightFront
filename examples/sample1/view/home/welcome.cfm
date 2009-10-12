@@ -10,7 +10,8 @@
 		#displayView("home/plugs")#
 	</div>
 	<div id="main_left">
-		<h2 style="margin-top: 2px;">Welcome to the homepage of the sample application for the LightFront Framework!</h2>
+		<h2 style="margin-top: 2px;">Welcome to the homepage of the sample! application for the LightFront Framework!</h2>
+		<p>This serves as a temporary homepage for the LightFront Framework, as well as answer some questions about LightFront and how to do certain things within the framework.</p>
 		#displayView("faq/faq")#
 	</div>
 </div>
