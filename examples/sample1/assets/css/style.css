@@ -43,13 +43,12 @@ body {
 
 #main_left {
 	float: left;
-	min-width: 800px;
-	width: 83%;
+	width: 80%;
 }
 
 #main_right {
 	float: right;
-	width: 13%;
+	width: 15%;
 	padding: 10px;
 	background-color: #DDF;
 	margin: 2px;
@@ -58,10 +57,11 @@ body {
 
 #main_right ul {
 	font-size: small;
-	padding: 0px 15px;
+	margin: 0px 10px;
 }
 
 #main_right ul li {
 	/*margin: 2px 0px;*/
 	padding: 0px 2px;
+	font-size: 12px;
 }
