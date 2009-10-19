@@ -15,23 +15,23 @@ body {
 	color: white;
 }
 
-#header #nav {
+#header #navbar {
 	color: white;
 	background-color: #000040;
 	width: 100%;
 	height: 30px;
 }
 
-#header #nav a {
+#header #navbar a {
 	color: white;
 }
 
-#header #nav #menu {
+#header #navbar #menu {
 	float: left;
 	padding: 5px;
 }
 
-#header #nav #loginmenu {
+#header #navbar #loginmenu {
 	float: right;
 	padding: 5px;
 }

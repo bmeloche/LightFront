@@ -96,6 +96,30 @@
 		</cftry>
 	</cffunction>
 
+	<cffunction name="getController" access="private" returntype="any" output="true" hint="I add the appropriate controller.">
+		<cfargument name="controllerName" type="string" required="true" />
+		<cftry>
+			<cfif structKeyExists(application.lfront.ctrl,arguments.controllerName)>
+				<cfreturn application.lfront.ctrl[arguments.controllerName] />
+			<cfelse>
+				<cfreturn application.lfront.settings.viewDirectory & "/" & arguments.controllerName & "/" />
+			</cfif>
+			<cfcatch type="any">
+				<cflog application="true" file="lightFrontException" type="error" text="getController(): #cfcatch.message# #cfcatch.detail#" />
+				<cfrethrow />
+			</cfcatch>
+		</cftry>
+	</cffunction>
+
+	<cffunction name="setSettings" access="private" returnType="void" hint="I make application.lfront.settings variables.settings.">
+		<cfset variables.settings = application.lfront.settings />
+	</cffunction>
+
+	<cffunction name="getSetting" access="public" returnType="any" hint="I get a setting.">
+		<cfargument name="setting" type="string" required="true" hint="I am the setting I want to retrieve." />
+		<cfreturn application.lfront.settings[arguments.setting]>
+	</cffunction>
+
 	<cffunction name="loadLightfrontRequest" access="public">
 		<cfargument name="requestVar" type="string" required="true" default="eventResult" />
 		<cfset var loc = structNew() />
@@ -122,24 +146,32 @@
 			<cfset request.attributes[settings.eventVariable] = settings.defaultClass & settings.eventDelimiter & request.attributes[settings.eventVariable] />
 		</cfif>
 		<cfset request.attributes[settings.eventVariable] = replace(request.attributes[settings.eventVariable],settings.eventDelimiter,".","ALL") />
-		<!--- Run pre-event, if one is specified in the configs. --->
+		<!--- Run pre-event, if one is specified in the configs. Store it in a separate request variable if one is defined. --->
 		<cfif structKeyExists(settings,"preEvent")>
-			<cfset request[arguments.requestVar] = request[arguments.requestVar] & callEvent(settings.preEvent) />
+			<cfif structKeyExists(settings,"preEventRequest")>
+				<cfset request[settings.preEventRequest] = callEvent(settings.preEvent) />
+			<cfelse>
+				<cfset request[arguments.requestVar] = request[arguments.requestVar] & callEvent(settings.preEvent) />
+			</cfif>
 		</cfif>
 		<!--- Run event. --->
-		<cfset request.attributes.you = listLen(request.attributes[settings.eventVariable],settings.eventDelimiter) />
 		<cfif listLen(request.attributes[settings.eventVariable],settings.eventDelimiter) GT 2>
 			<cfset request[arguments.requestVar] = request[arguments.requestVar] & displayView(request.attributes[settings.eventVariable]) />
 		<cfelse>
 			<cfset request[arguments.requestVar] = request[arguments.requestVar] & callEvent(request.attributes[settings.eventVariable]) />
 			<cfset request.thisis = request[arguments.requestVar] />
 		</cfif>
-		<!--- Run post-event, if one is specified in the configs. --->
+		<!--- Run post-event, if one is specified in the configs. Store it in a separate request variable if one is defined. --->
 		<cfif structKeyExists(settings,"postEvent")>
-			<cfset request[arguments.requestVar] = request[arguments.requestVar] & callEvent(settings.postEvent) />
+			<cfif structKeyExists(settings,"postEventRequest") AND settings.postEvent NEQ arguments.requestVar>
+				<cfset request[settings.postEventRequest] = callEvent(settings.postEvent) />
+			<cfelse>
+				<cfset request[arguments.requestVar] = request[arguments.requestVar] & callEvent(settings.postEvent) />
+			</cfif>
 		</cfif>
 	</cffunction>
 
+	<!--- Framework Functions --->
 	<cffunction name="callEvent" access="public" returntype="any" output="true" hint="I invoke the event.">
 		<cfargument name="event" type="any" required="true" hint="" />
 		<cfargument name="args" type="struct" required="false" hint="use to pass in arguments to an event" />
@@ -154,23 +186,30 @@
 		<cfif structKeyExists(application.lfront.ctrl,request.attributes.class)>
 			<cfset loc.controller = getController(request.attributes.class) />
 			<cfif loc.controller.controllerType IS "cfc">
-				<cfinvoke component="#loc.controller.controller#" method="#request.attributes.method#" returnvariable="loc.retEvent">
-					<cfif structKeyExists(arguments,"args")>
-						<cfinvokeargument name="args" value="#arguments.args#" />
-					</cfif>
-				</cfinvoke>
+				<cftry>
+					<cfinvoke component="#loc.controller.controller#" method="#request.attributes.method#" returnvariable="loc.retEvent">
+						<cfif structKeyExists(arguments,"args")>
+							<cfinvokeargument name="args" value="#arguments.args#" />
+						</cfif>
+					</cfinvoke>
+					<cfcatch type="any">
+						<cfset request.errorStruct = cfcatch />
+						<cfsavecontent variable="loc.retEvent"><cfdump var="#cfcatch#"></cfsavecontent>
+					</cfcatch>
+				</cftry>
 			<cfelseif loc.controller.controllerType IS "switch">
 				<cfset request.attributes[uCase(application.lfront.settings.switch.switchVariable)] = request.attributes.method />
 				<cfset variables.attributes = request.attributes />
 				<cfsavecontent variable="loc.retEvent"><cfinclude template="#loc.controller.controller#" /></cfsavecontent>
 			<cfelse>
-				<cfthrow message="Controller Type #loc.controller.controllerType# is not recognized." />
+				<cfset request.errorStruct = structNew() />
+				<cfset request.errorStruct.message = "Controller Type #loc.controller.controllerType# is not recognized." />
 			</cfif>
 		<cfelse>
-			<cfsavecontent variable="loc.retEvent">#displayView(request.attributes.class & "." & request.attributes.method)#</cfsavecontent>
+			<cfsavecontent variable="loc.retEvent">#displayView(request.attributes.class & "/" & request.attributes.method)#</cfsavecontent>
 		</cfif>
 		<cfset request.eventCounter = request.eventCounter + 1 />
-		<cfif isDefined("loc.retEvent")>
+		<cfif structKeyExists(loc,"retEvent")>
 			<cfreturn loc.retEvent />
 		<cfelse>
 			<cfreturn "" />
@@ -195,10 +234,12 @@
 				<cfset variables.attributes = request.attributes />
 				<cfsavecontent variable="loc.renderedView"><cfinclude template="#loc.switchName#" /></cfsavecontent>
 			<cfelse>
-				<cfset loc.renderedView = loc.viewError /> 
+				<cfset request.errorStruct = structNew() />
+				<cfset request.errorStruct.message = loc.viewError /> 
 			</cfif>
 		<cfelse>
-			<cfset loc.renderedView = loc.viewError />
+				<cfset request.errorStruct = structNew() />
+				<cfset request.errorStruct.message = loc.viewError /> 
 		</cfif>
 		<cfreturn loc.renderedView />
 	</cffunction>
@@ -209,30 +250,6 @@
 		<cfset var relo = getSetting('eventVariable') />
 		<cfsavecontent variable="relo"><cfoutput><script>location.href = "./?#relo#=#arguments.event#<cfif structKeyExists(arguments,"qstring")>&#arguments.qstring#</cfif>";</script></cfoutput></cfsavecontent>
 		<cfreturn trim(relo) />
-	</cffunction>
-
-	<cffunction name="getController" access="private" returntype="any" output="true" hint="I add the appropriate controller.">
-		<cfargument name="controllerName" type="string" required="true" />
-		<cftry>
-			<cfif structKeyExists(application.lfront.ctrl,arguments.controllerName)>
-				<cfreturn application.lfront.ctrl[arguments.controllerName] />
-			<cfelse>
-				<cfreturn application.lfront.settings.viewDirectory & "/" & arguments.controllerName & "/" />
-			</cfif>
-			<cfcatch type="any">
-				<cflog application="true" file="lightFrontException" type="error" text="getController(): #cfcatch.message# #cfcatch.detail#" />
-				<cfrethrow />
-			</cfcatch>
-		</cftry>
-	</cffunction>
-
-	<cffunction name="setSettings" access="private" returnType="void" hint="I make application.lfront.settings variables.settings.">
-		<cfset variables.settings = application.lfront.settings />
-	</cffunction>
-
-	<cffunction name="getSetting" access="public" returnType="any" hint="I get a setting.">
-		<cfargument name="setting" type="string" required="true" hint="I am the setting I want to retrieve." />
-		<cfreturn application.lfront.settings[arguments.setting] />
 	</cffunction>
 
 </cfcomponent>
