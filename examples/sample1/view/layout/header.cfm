@@ -9,7 +9,6 @@
 	<h1>The LightFront Framework</h1>
 	<div id="navbar">
 		<div id="menu">
-			<a href="/#application.lfront.settings.defaultPage#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 			<a href="#getSetting('defaultPage')#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 			<a href="/?do=faq.faq">FAQ</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 			<a href="/?do=home.welcome">Welcome</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
