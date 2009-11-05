@@ -24,7 +24,8 @@
 		<cfset application.thiswas = this />
 		<cfset application.lfront = structNew() />
 		<cfset application.lfront.settings = loadSettings(setCustomLightFrontSettings()) />
-		<cfset application.lfront.ctrl = loadLightFront() />
+		<cfset application.lfront.service = loadServices() />
+		<cfset application.lfront.ctrl = loadControllers() />
 		<cfset application.startTime = now() />
 		<cfset this.lfLoadTime = getTickCount() - this.lfLoadTime />
 		<!--- If you need to set anything in the Application scope after starting Lightfront, set it here. --->
