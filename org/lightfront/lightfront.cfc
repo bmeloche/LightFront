@@ -15,39 +15,30 @@
 	<cfset variables.instance = structNew() />
 	<cfparam name="request.eventCounter" type="numeric" default="0" />
 
-	<cffunction name="loadLightFront" access="public" returntype="struct" hint="I load the LightFront framework into the application.">
-		<cfset var local = structNew() />
-		<cftry>
-			<!--- Load new Lightfront controllers, which will set controllers (cfcs and cfms), and views. --->
-			<cfset local.controllers = loadControllers() />
-			<cfreturn local.controllers />
-			<cfcatch type="Any">
-				<cflog application="true" file="lightFrontException" type="error" text="loadLightFront(): #cfcatch.message# #cfcatch.detail#" />
-				<cfrethrow />
-			</cfcatch>
-		</cftry>
-	</cffunction>
-
 	<cffunction name="loadSettings" access="public" returntype="struct" output="false" hint="I load the settings, and set any necessary defaults.">
 		<cfargument name="settings" type="struct" required="true" />
 		<cfset var lfs = structNew() />
 		<cftry>
 			<cfset lfs.settings = arguments.settings />
-			<cfset lfs.settings.lightfrontVersion = "0.3.6" />
+			<cfset lfs.settings.lightfrontVersion = "0.4.0" />
 			<cfparam name="lfs.settings.applicationMode" type="string" default="development" />
 			<cfparam name="lfs.settings.startupTimeout" type="numeric" default="60" />
 			<cfparam name="lfs.settings.reload" type="string" default="reload" />
 			<cfparam name="lfs.settings.reloadpassword" type="string" default="true" />
 			<cfparam name="lfs.settings.cfcControllerDirectory" type="string" default="/lf/controller/" />
 			<cfparam name="lfs.settings.viewDirectory" type="string" default="/lf/view/" />
+			<cfparam name="lfs.settings.serviceDirectory" type="string" default="/lf/model/" />
 			<cfparam name="lfs.settings.controllerPrefix" type="string" default="" />
 			<cfparam name="lfs.settings.controllerSuffix" type="string" default="" />
+			<cfparam name="lfs.settings.servicePrefix" type="string" default="" />
+			<cfparam name="lfs.settings.serviceSuffix" type="string" default="Service" />
 			<cfparam name="lfs.settings.defaultClass" type="string" default="main" />
 			<cfparam name="lfs.settings.defaultMethod" type="string" default="default" />
 			<cfparam name="lfs.settings.eventDelimiter" type="string" default="." />
 			<cfparam name="lfs.settings.eventVariable" type="string" default="do" />
 			<cfparam name="lfs.settings.defaultPage" type="string" default="index.cfm" />
 			<cfparam name="lfs.settings.viewExtension" type="string" default=".cfm" />
+			<cfset lfs.settings.foo = "bar" />
 			<cfset lfs.settings.defaultEvent = lfs.settings.defaultClass & lfs.settings.eventDelimiter & lfs.settings.defaultMethod />
 			<cfif NOT structKeyExists(lfs.settings,"dump")>
 				<cfset lfs.settings.dump = structNew() />
@@ -91,6 +82,35 @@
 			<cfreturn loc.controllers />
 			<cfcatch type="Any">
 				<cflog application="true" file="lightFrontException" type="error" text="loadControllers(): #cfcatch.message# #cfcatch.detail#" />
+				<cfrethrow />
+			</cfcatch>
+		</cftry>
+	</cffunction>
+
+	<cffunction name="loadServices" access="public" returntype="struct" output="false" hint="I load the Lightfront services into the application.">
+		<cfset var loc = structNew() />
+		<cftry>
+			<cfset setSettings() />
+			<cfset loc.services = structNew() />
+			<!--- Load CFC Services. This is a convention. We assume all LightFront services are CFC-based. --->
+			<cfset loc.searchKey = iif(structKeyExists(settings,"servicePrefix"),DE(settings.servicePrefix),DE("")) & "*" & iif(structKeyExists(settings,"serviceSuffix"),DE(settings.serviceSuffix),DE("")) & ".cfc" />
+			<cfdirectory action="list" directory="#expandPath(settings.serviceDirectory)#" filter="#settings.servicePrefix#*#settings.serviceSuffix#.cfc" name="loc.serviceList" recurse="true" />
+			<cfloop query="loc.serviceList">
+				<cfset loc.tempService = trim(replaceNoCase(loc.serviceList.name,".cfc","")) />
+				<cfset loc.tempObjectName = loc.tempService />
+				<cfif settings.servicePrefix NEQ "">
+					<cfset loc.tempObjectName = trim(replaceNoCase(loc.tempService,settings.servicePrefix,"")) />
+				</cfif>
+				<cfif settings.serviceSuffix NEQ "">
+					<cfset loc.tempObjectName = trim(replaceNoCase(loc.tempService,settings.serviceSuffix,"")) />
+				</cfif>
+				<cfif loc.tempService NEQ "">
+					<cfset loc.services[loc.tempService] = createObject("component","lf.model.#loc.tempObjectName#.#loc.tempService#") />
+				</cfif>
+			</cfloop>
+			<cfreturn loc.services />
+			<cfcatch type="Any">
+				<cflog application="true" file="lightFrontException" type="error" text="loadServices(): #cfcatch.message# #cfcatch.detail#" />
 				<cfrethrow />
 			</cfcatch>
 		</cftry>
