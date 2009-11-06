@@ -20,7 +20,7 @@
 		<cfset var lfs = structNew() />
 		<cftry>
 			<cfset lfs.settings = arguments.settings />
-			<cfset lfs.settings.lightfrontVersion = "0.4.0" />
+			<cfset lfs.settings.lightfrontVersion = "0.4.1" />
 			<cfparam name="lfs.settings.applicationMode" type="string" default="development" />
 			<cfparam name="lfs.settings.startupTimeout" type="numeric" default="60" />
 			<cfparam name="lfs.settings.reload" type="string" default="reload" />

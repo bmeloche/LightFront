@@ -1,6 +1,8 @@
 <cfcomponent output="false" hint="CFBuilder-Generated:userType">
 
-	
+	<cffunction name="init" returntype="any">
+		<cfreturn this />
+	</cffunction>
 	<!----
 	USERTYPE SERVICES
 

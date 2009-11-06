@@ -1,15 +1,15 @@
 <form action="./?do=security.doLogin" method="post">
-	<h1>Login</h1>
+	<h2>Login</h2>
 	<cfif structKeyExists(request.attributes,"loginfailure") AND request.attributes.loginfailure>
-		<h2>Your login failed! Please try again.</h2>
+		<h3 class="failure_message">Your login failed! Please try again.</h3>
 	<cfelseif structKeyExists(cookie,"username")>
-		<h2>If you're logged in and got here, that's because you came here from do=security.login, not do=home.login.</h2>
+		<h3>If you're logged in and got here, that's because you came here from do=security.login, not do=home.login.</h3>
 	</cfif>
 	<fieldset title="Login Form">
 		<legend> Login Form </legend>
 		<table>
 			<tr>
-				<td colspan="2"><h3>Put anything in for the username. Password = password.</h3></td>
+				<td colspan="2"><h3>Please login...</h3></td>
 			</tr>
 			<tr>
 				<td><label for="name" title="username">Username:</label></td>

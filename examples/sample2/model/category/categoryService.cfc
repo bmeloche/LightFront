@@ -1,5 +1,9 @@
 <cfcomponent displayname="categoryService" output="false">
 
+	<cffunction name="init" returntype="any">
+		<cfreturn this />
+	</cffunction>
+
 	<!--- Add category --->
 	<cffunction name="createcategory" returntype="category" access="remote">
 		<cfargument name="item" type="category" required="true" />

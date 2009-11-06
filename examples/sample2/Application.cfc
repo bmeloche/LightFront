@@ -7,7 +7,7 @@
 		this.sessionTimeout = createTimeSpan(0,0,30,0);
 		this.cookieManagement = true;
 		this.setClientCookies = false;
-		this.datasource = "aeqDSN";
+		this.datasource = "lightfront_sample2";
 		this.ormenabled = true;
 		this.ormsettings = {
 			cfclocation = "model"

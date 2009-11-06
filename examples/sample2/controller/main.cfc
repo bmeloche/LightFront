@@ -1,7 +1,7 @@
 <cfcomponent displayname="main" extends="org.lightfront.lightfront" output="false" hint="home controller">
 
-	<cfset securityService = application.lfront.service.securityService />
-	<cfset categoryService = application.lfront.service.categoryService />
+	<cfset securityService = application.lfront.service.securityService.init() />
+	<cfset categoryService = application.lfront.service.categoryService.init() />
 
 	<cffunction name="onMissingMethod" returntype="string" output="false">
 		<cfargument name="missingMethodName" type="string" required="true" hint="The name of the missing method." />
@@ -55,7 +55,7 @@
 		<cfif loc.result>
 			<cfreturn relocate("admin.welcome") />
 		<cfelse>
-			<cfreturn relocate("main.loginfailure") />
+			<cfreturn relocate("security.showlogin","loginfailure=1") />
 		</cfif>
 	</cffunction>
 

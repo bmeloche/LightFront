@@ -1,6 +1,8 @@
 <cfcomponent output="false" hint="CFBuilder-Generated:user">
 
-	
+	<cffunction name="init" returntype="any">
+		<cfreturn this />
+	</cffunction>
 	<!----
 	USER SERVICES
 

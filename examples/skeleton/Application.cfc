@@ -107,8 +107,8 @@
 			/*LightFront application settings are configured here, and are loaded in onApplicationStart().
 			* These settings are accessible via the application.lfront.settings scope.
 			* I'm using lfs here instead of "local". In CF9, you have to be careful how you use a variable called "local".
-			* lfs = LightFront Setting (keep it simple!) */
-			var lfs = structNew();
+			* lf = LightFront Setting (keep it simple!) */
+			var lf = structNew();
 
 			/*1) Required Settings (all have defaults) - All values are shown here, for reference only. Delete the commented values, if you wish.
 			* You only need to set these if you have to override the default values. The defaults are set in LightFront.cfc.
@@ -121,41 +121,43 @@
 			*	development = The application restarts only when a reload is requested. Dump is always provided. This is the default setting.
 			*	testing = The application restarts only when a reload is requested. Dump is provided when a dump is requested. Recommended setting for large applications in development or testing.
 			*	production = Application restarts and dumps are only provided on the server or by specific IP subset. Restricted mode for security purposes.*/
-			//lfs.applicationMode = "development"; default is "development". The mode of your application. Set to development if you're constantly changing your app.
-			//lfs.startupTimeout = 60; //Set the initial framework load timeout here. 60 is the default, though LightFront would not need anywhere near that.
-			//lfs.eventVariable = "do"; //eg. index.cfm?do=home.welcome; "do" is the default. home.welcome is the event. home = class, welcome = method.
-			//lfs.eventDelimiter = "."; //You could also set to ":".
-			//lfs.defaultClass = "main"; //used if no classes are defined. Default is main.
-			//lfs.defaultMethod = "default"; //used if no methods are defined. Default is default.
-			//lfs.defaultEvent = lfs.defaultClass & lfs.eventDelimiter & lfs.defaultMethod />
-			//lfs.defaultPage = "index.cfm"; //Can be set to any page name; it must be a .cfm file in this directory.
-			//lfs.modelDirectory = "/model/"; //Leaving here - possible addition to the framework. Not used in this version.
-			//lfs.viewDirectory = "/view/"; //Your controller directory; /view/ is the default.
-			//lfs.cfcControllerDirectory = "/controller/"; //Your controller directory; /controller/ is the default.
-			//lfs.controllerPrefix = ""; //eg. prefix = "lf": class = home, controller = lfhome.cfc. "" is the default.
-			//lfs.controllerSuffix = ""; //eg. suffix = "controller": class = home, controller = homecontroller.cfc. "" is the default.
-			//lfs.viewExtension = ".cfm"; //eg. you would set this if you need to specify that include files are some other extension, such as ".cfi"
+			//lf.applicationMode = "development"; default is "development". The mode of your application. Set to development if you're constantly changing your app.
+			//lf.startupTimeout = 60; //Set the initial framework load timeout here. 60 is the default, though LightFront would not need anywhere near that.
+			//lf.eventVariable = "do"; //eg. index.cfm?do=home.welcome; "do" is the default. home.welcome is the event. home = class, welcome = method.
+			//lf.eventDelimiter = "."; //You could also set to ":".
+			//lf.defaultClass = "main"; //used if no classes are defined. Default is main.
+			//lf.defaultMethod = "default"; //used if no methods are defined. Default is default.
+			//lf.defaultEvent = lf.defaultClass & lf.eventDelimiter & lf.defaultMethod. />
+			//lf.defaultPage = "index.cfm"; //Can be set to any page name; it must be a .cfm file in this directory.
+			//lf.serviceDirectory = "/model/"; //Leaving here - possible addition to the framework. Not used in this version.
+			//lf.viewDirectory = "/view/"; //Your controller directory; /view/ is the default.
+			//lf.cfcControllerDirectory = "/controller/"; //Your controller directory; /controller/ is the default.
+			//lf.controllerPrefix = ""; //eg. prefix = "lf": class = main, controller = lfmain.cfc. "" is the default.
+			//lf.controllerSuffix = ""; //eg. suffix = "Controller": class = main, controller = homeController.cfc. "" is the default.
+			//lf.servicePrefix = ""; //eg. prefix = "lf": class = main, service = lfmain.cfc. "" is the default.
+			//lf.serviceSuffix = "Service";//eg. suffix = "Service": class = main, service = mainService.cfc. "Service" is the default, so that services can exists with the rest of the object model.
+			//lf.viewExtension = ".cfm"; //eg. you would set this if you need to specify that include files are some other extension, such as ".cfi"
 
 			//2) Optional Settings - These are not needed to be set by LightFront, unless you need that setting, such as for assignments or switch-style controllers.
-			//lfs.preEvent = "layout.header"; //I'm using this to display the header, but it can be used on any event that will always run before the requested event.
-			//lfs.postEvent = "layout.footer"; //I'm using this to display the footer, but it can be used on any event that will always run before the requested event.
-			//lfs.defaultPage = "index.cfm"; //the default page for the controller. "index.cfm" is the default. It is possible to allow any page to access LightFront if you choose, though it's not recommended.
-			//lfs.formURLPrecedence = "form"; //"form" or "URL". If you set to URL, url variables will overwrite form variables.
+			//lf.preEvent = "layout.header"; //I'm using this to display the header, but it can be used on any event that will always run before the requested event.
+			//lf.postEvent = "layout.footer"; //I'm using this to display the footer, but it can be used on any event that will always run before the requested event.
+			//lf.defaultPage = "index.cfm"; //the default page for the controller. "index.cfm" is the default. It is possible to allow any page to access LightFront if you choose, though it's not recommended.
+			//lf.formURLPrecedence = "form"; //"form" or "URL". If you set to URL, url variables will overwrite form variables.
 
 			//3) Assignments - Assign a class to a controller/switch, if you want to allow assignments, particularly useful if you want a single controller.
 			//If you are using the controller prefix/suffix, set up assignment post prefix/suffix.
 			//This is similar to defining circuits in Fusebox.
-			//lfs.assignments = structNew();
-			//lfs.assignments.home = "controller"; // eg. admin.login = home.admin_login;
+			//lf.assignments = structNew();
+			//lf.assignments.home = "controller"; // eg. home.login = controller.login;
 
 			//4) Switch-based Controllers - If you have switches (Fusebox 2-3 style controllers, represent them here, much like you would in a fusebox.init.cfm.
-			//lfs.switch = structNew();
-			//lfs.switch.switchVariable = "fuseaction"; //this will assign do to fuseaction.
-			//lfs.switch.switchPage = "switch.cfm"; //the name of the file.
-			//lfs.switch.switchRoot = "/controller/switch/";
-			//lfs.switch.switches = structNew();
-			//lfs.switch.switches.switch = "";
-			//lfs.switch.switches.test = "test/";
+			//lf.switch = structNew();
+			//lf.switch.switchVariable = "fuseaction"; //this will assign do to fuseaction.
+			//lf.switch.switchPage = "switch.cfm"; //the name of the file.
+			//lf.switch.switchRoot = "/controller/switch/";
+			//lf.switch.switches = structNew();
+			//lf.switch.switches.switch = "";
+			//lf.switch.switches.test = "test/";
 			return lfs;
 		</cfscript>
 	</cffunction>

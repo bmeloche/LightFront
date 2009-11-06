@@ -1,8 +1,10 @@
 <cfcomponent displayname="securityService" output="false">
 
-	
-	<!---<cfset userService = application.lfront.service.userService />--->
-	<cfset userService = createObject("component","lf.model.user.userService") />
+	<!---<cfset userService = createObject("component","lf.model.user.userService") />--->
+	<cffunction name="init" returntype="any">
+		<cfset userService = application.lfront.service.userService.init() />
+		<cfreturn this />
+	</cffunction>
 
 	<cffunction name="doLogin" returntype="boolean">
 		<cfargument name="username" type="String" required="true" />
@@ -18,7 +20,6 @@
 	</cffunction>
 
 	<cffunction name="doLogout" returntype="void">
-		<!---<cfcookie name="username" expires="-1" />--->
 		<cfset structDelete(cookie,"username") />
 	</cffunction>
 

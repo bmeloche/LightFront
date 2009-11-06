@@ -1,1 +1,1 @@
-<h1>AEquitas - Staff</h1>
+<h1>Our Staff</h1>
