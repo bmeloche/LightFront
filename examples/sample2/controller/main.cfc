@@ -1,7 +1,7 @@
 <cfcomponent displayname="main" extends="org.lightfront.lightfront" output="false" hint="home controller">
 
-	<cfset securityService = application.lfront.service.securityService.init() />
-	<cfset categoryService = application.lfront.service.categoryService.init() />
+	<cfset securityService = initService('security') />
+	<cfset categoryService = initService('category') />
 
 	<cffunction name="onMissingMethod" returntype="string" output="false">
 		<cfargument name="missingMethodName" type="string" required="true" hint="The name of the missing method." />
@@ -71,22 +71,30 @@
 	</cffunction>
 
 	<cffunction name="categories" returntype="string" output="false">
-		<cfset var local = structNew() />
-		<cfset local.categoryList = categoryService.getAllCategory() />
-		<cfreturn displayView("admin/categories",local) />
+		<cfset var loc = structNew() />
+		<cfset loc.categoryList = categoryService.getAllCategory() />
+		<cfreturn displayView("admin/categories",loc) />
 	</cffunction>
 
 	<cffunction name="editCategory" returntype="string" output="false">
 		<cfargument name="id" type="Numeric" default="0" />
-		<cfset var local = structNew() />
-		<cfset local.category = queryNew("id,categoryName","integer,varchar") />
+		<cfset var loc = structNew() />
+		<cfset loc.category = queryNew("id,categoryName","integer,varchar") />
 		<cfif structKeyExists(request.attributes,"id")>
 			<cfset arguments.id = request.attributes.id />
 		</cfif>
 		<cfif arguments.id NEQ 0>
-			<cfset local.category = categoryService.getCategory(ID=arguments.id) />
+			<cfset loc.category = categoryService.getCategory(ID=arguments.id) />
 		</cfif>
-		<cfreturn displayView("admin/editcategory",local) />
+		<cfreturn displayView("admin/editcategory",loc) />
+	</cffunction>
+
+	<cffunction name="doEditCategory" returntype="boolean" output="false">
+		<cfset var loc = structNew() />
+		<cfset loc.hasErrors = arrayNew(1) />
+		<cfset loc.editStruct = structNew() />
+		<!--- Throw back to form if there's an issue. --->
+		<!--- Save category - insert or update - if it passes validation. --->
 	</cffunction>
 
 </cfcomponent>

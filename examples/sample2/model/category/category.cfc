@@ -5,4 +5,4 @@
 	<cfproperty name="categoryName" column="categoryName" type="string" ormtype="string" />
 	<cfproperty name="categoryStatus" column="categoryStatus" type="numeric" ormtype="byte" />
 
-</cfcomponent> 
+</cfcomponent>
