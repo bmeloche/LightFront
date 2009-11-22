@@ -2,7 +2,8 @@
 <div id="main" style="width: 100%;">
 	<div id="main_right">
 		<div><em>This application was written in LightFront!</em></div>
-		<p><a href="downloads/lightfront.zip"><strong>Download</strong></a> (.zip)</p>
+		<p><a href="http://svn.lightfront.org/svn/lightfront/downloads/lightfront.zip"><strong>Download</strong></a> (.zip)</p>
+		<p><a href="http://svn.lightfront.org/svn/lightfront/downloads/LightFront.zip"><strong>Download Version 0.4.3 - in progress</strong></a> (.zip)</p>
 		<p><a href="http://test.lightfront.org/skeleton/">View the LightFront skeleton application</a></p>
 		<p><a href="http://svn.lightfront.org/svn/lightfront">Browse the LightFront SVN repository</a></p>
 		<form action="http://groups.google.com/group/lightfront/boxsubscribe">
