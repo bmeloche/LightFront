@@ -12,10 +12,16 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 
+This version of LightFront is 0.4.3.
+
+If you are reading this file from a LightFront application, it that means your installation of
+LightFront didn't quite go as planned.
+
 Installing LightFront
 
 Assuming you are planning to build your first LightFront application, choose the examples/skeleton
-as your starting point.
+as your starting point. There is a more verbose skeleton at examples/skeleton_verbose if you're setting 
+a LightFront application for the first time.
 
 If you want to see a sample application, choose examples/sample1.
 
@@ -23,10 +29,15 @@ We don't have full blown samples built yet, but that is on the horizon.
 
 Here's the easiest installation - LightFront at the root of your website:
 
-1) Choose skeleton or sample1. Unzip that to your site root. Example below.
+1) Unzip LightFront.zip to a folder on your computer. Don't unzip it to its
+final destination. We're going to move only selected directories in.
+
+2) Go to the examples folder. Copy the skeleton folder your application
+root. Example below:
 
 webroot
 	L-- controller
+	L-- model
 	L-- view
 	L-- assets (example... not a requirement)
 		L-- css
@@ -35,7 +46,7 @@ webroot
 	Application.cfc
 	index.cfm
 
-2) Put the /org/lightfront folder at the root of your web server, or create a mapping to its location.
+3) Copy the /org/lightfront folder at the root of your web server, or create a mapping to its location.
 
 Continuing the previous example:
 
@@ -43,6 +54,7 @@ webroot
 	L-- org
 		L-- lightfront
 			-- lightfront.cfc
+	L-- model
 	L-- controller
 	L-- view
 	L-- assets
@@ -52,22 +64,26 @@ webroot
 	-- Application.cfc
 	-- index.cfm
 
-3) Call up your website in the browser.
+4) Call up your website in the browser.
 
-You'll either want to surf LightFront as the root of a site (e.g. http://www.lightfront.test/,
-http://lightfront/, http://localhost/ or http://localhost/lightfront/). Choose that first. If you want to
-try lightfront at the root of a site, set up any HOSTS file entries (if installing locally), virtual host
+You'll either want to surf LightFront as the root of a site
+(e.g. http://www.lightfront.test/, http://lightfront/, http://localhost/ or
+http://localhost/lightfront/). Choose that first. If you want to try lightfront
+at the root of a site, set up any HOSTS file entries (if installing locally), virtual host
 settings or websites if needed.
 
+NOTE: Because you are extending Application.cfc, you can't define the org/lightfront mapping in your Application.cfc.
 
-
-
-NOTE: Because you are extending Application.cfc, you can't define org/lightfront in your Application.cfc.
-
-
-3) Place your controller and view folder at either one down from your site root, under your application
+5) Place your controller and view folder at either one down from your site root, under your application
 folder or other locations of your choice.
 
-4) In Application.cfc, map /lf/controller and /lf/view to the controller and view locations.
+6) In Application.cfc, map /lfront to the root (where your Application.cfc is located. If you are using ColdFusion MX 7,
+add a mapping in CFAdministrator to lfront at the root of your application.
 
-5) Access
+7) If you choose different locations for the model, view and controller directories, add mappings to /lfront/model,
+/lfront/controller and /lfront/view in your Application.cfc or Administrator.
+
+8) Access your site! If you get a LightFront hello world, you are set up and ready to go! This skeleton application shows a
+basic MVC pattern, with a model (a service), view and controller.
+
+9) Check the /examples directory for more sample applications!
