@@ -1,0 +1,89 @@
+body {
+	padding: 0px;
+	margin: 0px;
+	font-family: Arial, Helvetica, san-serif;
+	font-size: 11pt;
+}
+
+hr	{
+	clear: both;
+	margin: 0px;
+}
+
+h4, h6 {
+	margin: 2px;
+}
+
+#header {
+	margin: 0px;
+}
+
+#header h1 {
+	margin: 0px;
+	background-color: #000080;
+	color: white;
+}
+
+#header #navbar {
+	color: white;
+	background-color: #000040;
+	width: 100%;
+	height: 30px;
+}
+
+#header #navbar a {
+	color: white;
+}
+
+#header #navbar #menu {
+	float: left;
+	padding: 5px;
+}
+
+#header #navbar #loginmenu {
+	float: right;
+	padding: 5px;
+}
+
+#content {
+	clear: both;
+	margin: 10px;
+}
+
+#main_left {
+	float: left;
+	width: 80%;
+}
+
+#main_right {
+	float: right;
+	width: 15%;
+	padding: 10px;
+	background-color: #DDF;
+	margin: 2px;
+	border: 2px solid black;
+}
+
+#main_right ul {
+	font-size: small;
+	margin: 0px 10px;
+}
+
+#main_right ul li {
+	padding: 0px 2px;
+	font-size: 12px;
+}
+
+#footer_left {
+	width: auto;
+	float: left;
+	margin: 5px;
+}
+
+#footer_right {
+	width: 250px;
+	float: right;
+	margin: 5px;
+	vertical-align: text-top;
+}
+
