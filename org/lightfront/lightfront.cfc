@@ -169,7 +169,7 @@
 	<cffunction name="callAction" access="public" returntype="any" output="true" hint="I call the action (do). I will replace callEvent() in 0.4.4. I have been provided for forward compatibility.">
 		<cfargument name="action" type="string" required="true" hint="I am the action to be called." />
 		<cfargument name="args" type="any" required="false" hint="I am used to pass in arguments directly to an action." />
-		<cfreturn callEvent(argumentCollection=arguments) />
+		<cfreturn callEvent(event=arguments.action,args=arguments.args) />
 	</cffunction>
 
 	<cffunction name="callEvent" access="public" returntype="any" output="true" hint="I invoke the event. This function will be deprecated in 0.4.4, and replaced by callAction().">
@@ -237,7 +237,7 @@
 
 	<cffunction name="initComponent" access="public" returntype="any" output="true" hint="I initialize a component, usually in the model, for the application to use. I should be called in onApplicationStart() and set to application.lfront.initComponent.">
 		<cfargument name="componentName" type="string" required="true" hint="the component name, in dot notation." />
-		<cfargument name="useModelRoot" type="string" required="true" default="true" hint="Declare whether or not to use the modelRoot defined in LightFront's settings. Allows you to use this function elsewhere and to use it for things other than in the model." />
+		<cfargument name="useModelRoot" type="boolean" required="true" default="true" hint="Declare whether or not to use the modelRoot defined in LightFront's settings. Allows you to use this function elsewhere and to use it for things other than in the model." />
 		<cfargument name="load" type="boolean" required="true" default="true" hint="Do I load this component in the application scope or not?" />
 		<cfset var lfront = structNew() />
 		<cfif structKeyExists(application.lfront,"model") AND structKeyExists(application.lfront.model,arguments.componentName)>
