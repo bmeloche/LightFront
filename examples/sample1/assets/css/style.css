@@ -14,6 +14,10 @@ h4, h6 {
 	margin: 2px;
 }
 
+h3.error {
+	color: #F00;
+}
+
 #header {
 	margin: 0px;
 }
@@ -87,3 +91,47 @@ h4, h6 {
 	vertical-align: text-top;
 }
 
+#employeetable {
+	font-size: 10pt;
+	width: 90%;
+	padding: 0px 45px 5px 10px;
+}
+
+#employeetable td {
+	padding: 0 45px 5px 10px;
+}
+
+p.importantpoint {
+	margin: 0 100px;
+	font-size: 12pt;
+	font-style: oblique;
+	font-weight: bolder;
+}
+
+.code {
+	color: #900;
+}
+
+.codeattribute, .functionattribute {
+	color: #00C;
+}
+
+.codecomment {
+	background-color: #FF0;
+}
+
+.function {
+	color: #090;
+}
+.scriptcomment {
+	color: #666;
+}
+.codehighlight {
+	background-color: #FF9;
+}
+.codehtml {
+	color: #060;
+}
+.codecfpound {
+	color: #000;
+}

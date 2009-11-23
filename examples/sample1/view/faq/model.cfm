@@ -1,6 +1,0 @@
-<h2>How do you call the model from LightFront?</h2>
-<p>This question was asked <a href="">here</a>.</p>
-<p>LightFront doesn't currently deal with addressing the model. That's partially by design, because LightFront doesn't force a way to do this.</p>
-<p>Essentially, you can interact with the model in a way that works for you. If you use a dependency injection framework like ColdSpring or LightWire, there's nothing stopping you from doing that. If you've built your own factory, you can keep using it. There isn't anything specifically built to support any one way of interacting with your model.</p>
-<p>We understand that's not a great answer for some, who are looking for some guidance on how to do it. Therefore, the next sample application will interact with the model in a basic way, and we'll also follow that up with a home grown factory sample to interact with the model as well as a sample using ColdSpring for the model.</p>
-<p>We would like your feedback on how you would like to deal with the model.</p>

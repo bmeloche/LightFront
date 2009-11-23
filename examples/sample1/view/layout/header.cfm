@@ -10,11 +10,13 @@
 	<div id="navbar">
 		<div id="menu">
 			<a href="#getSetting('defaultPage')#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="./?do=howto.howto">How To</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 			<a href="./?do=faq.faq">FAQ</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./?do=home.welcome">Welcome</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./?do=home.hello">Hello</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./?do=switch.hello">Switch Controllers</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./?do=security.login">Call a View directly (login page)</a>
+			<a href="./?do=security.login">Call a View directly</a>
+			<cfif isDefined("cookie") AND structKeyExists(cookie,"username")>
+				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="./?do=employee.overview">MVC CFC Controller Example</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+				<a href="./?do=switch.hello">Switch Controller Example</a>
+			</cfif>
 		</div>
 		<div id="loginmenu">
 			<cfif isDefined("cookie") AND structKeyExists(cookie,"username")>
@@ -22,6 +24,7 @@
 			<cfelse>
 				<a href="./?do=login">Login</a>
 			</cfif>
+			(MVC Example)
 		</div>
 	</div>
 </div>

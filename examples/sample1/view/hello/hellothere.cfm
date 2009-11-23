@@ -1,8 +1,11 @@
-<h2>Hello! I am ./view/home/hello/hellothere.cfm!</h2>
-<cfif request.attributes.do IS "home.hello">
-	<h3>I was called as displayView("home/hello/hellothere")</h3>
-	<p>I can also be called <a href="./?do=home.hellovariant">this way</a>.</p>
-<cfelse>
-	<h3>I was called as displayView("home.hello.hellothere"), if "." is the event delimiter.</h3>
-	<p>I can also be called <a href="./?do=home.hello">this way.</a></p>
-</cfif>
+<cfset data = arguments />
+<cfoutput>
+<h2>MVC Examples - Returning Employee Data as an Array of Objects</h2>
+#displayView("employee/menu")#
+<h4>Employee Information:</h4>
+Employee ID: #data.content[1].getEmployeeID()#<br />
+User ID: #data.content[1].getUserID()#<br />
+Name: #data.content[1].getFirstName()# #data.content[1].getLastName()# <br />
+Location: #data.content[1].getLocation()#<br />
+Job Title: #data.content[1].getTitle()#<br />
+</cfoutput>

@@ -1,3 +1,6 @@
+<cfif structKeyExists(request,"errorStruct") AND structKeyExists(request.errorStruct,"message")>
+	<cfoutput>#request.errorStruct.message#</cfoutput>
+</cfif>
 </div>
 <hr align="center" style="clear: both; margin: 0px;"/>
 <div align="center">

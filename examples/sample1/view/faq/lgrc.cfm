@@ -1,1 +1,0 @@
-<p><a href="http://test.lgrc.us/LGRC.sql">Right-click and save</a></p>

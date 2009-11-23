@@ -31,7 +31,7 @@
 	<div id="main_left">
 		<h2 style="margin-top: 2px;">Welcome to the homepage of the &quot;sample1&quot; application for the LightFront Framework!</h2>
 		<p>This serves as a temporary homepage for the LightFront Framework, as well as answer some questions about LightFront and how to do certain things within the framework.</p>
-		#displayView("faq/faq")#
+		#displayView("howto/howto")#
 	</div>
 </div>
 <div style="clear: both;"></div>

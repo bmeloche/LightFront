@@ -1,7 +1,8 @@
-<h2>What is callEvent()?</h2>
+<h2>relocate()</h2>
+<p>relocate() is a replacement for &lt;cflocation&gt; to do a location.href redirect and keep the user in the framework.</p>
 <table border="1" cellpadding="5">
 	<tr>
-		<th colspan="4">callEvent()</th>
+		<th colspan="4">relocate()</th>
 	</tr>
 	<tr valign="top">
 		<th>Argument</th>
@@ -10,7 +11,7 @@
 		<th>Description</th>
 	</tr>
 	<tr valign="top">
-		<td>eventName</td>
+		<td>event</td>
 		<td>string</td>
 		<td>Required</td>
 		<td>
@@ -21,11 +22,11 @@
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>args</td>
-		<td>any</td>
+		<td>qstring</td>
+		<td>string</td>
 		<td>Optional</td>
 		<td>
-			Any data you want to pass into the event (this will probably be deprecated).
+			The query string you want to pass into the relocate() request.
 		</td>
 	</tr>
 </table>

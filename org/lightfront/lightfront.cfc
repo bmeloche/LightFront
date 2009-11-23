@@ -100,8 +100,13 @@
 		</cftry>
 	</cffunction>
 
-	<cffunction name="setSettings" access="private" returnType="void" hint="I make application.lfront.settings variables.settings.">
+	<cffunction name="setSettings" access="public" returnType="void" hint="I make application.lfront.settings variables.settings.">
 		<cfset variables.settings = application.lfront.settings />
+	</cffunction>
+
+	<cffunction name="getSetting" access="public" returnType="any" hint="I get a setting.">
+		<cfargument name="setting" type="string" required="true" hint="I am the setting I want to retrieve." />
+		<cfreturn application.lfront.settings[arguments.setting]>
 	</cffunction>
 
 	<!--- Framework Functions --->
@@ -155,10 +160,10 @@
 	</cffunction>
 
 	<cffunction name="loadAction" access="public" returntype="void" output="false" hint="I do a callAction() and save the result to the request scope.">
+		<cfargument name="requestVar" type="string" required="true" hint="I am the request variable name to save the action to." />
 		<cfargument name="action" type="any" required="true" hint="I am the action to be called." />
 		<cfargument name="args" type="struct" required="false" hint="I am used to pass in arguments directly to an action." />
-		<cfargument name="var" type="string" required="true" hint="I am the request variable name to save the action to." />
-		<cfset request[arguments.var] = callEvent(argumentCollection=arguments) />
+		<cfset request[arguments.requestVar] = callAction(action=arguments.action,args=arguments.args) />
 	</cffunction>
 
 	<cffunction name="callAction" access="public" returntype="any" output="true" hint="I call the action (do). I will replace callEvent() in 0.4.4. I have been provided for forward compatibility.">
@@ -210,7 +215,7 @@
 		</cfif>
 	</cffunction>
 
-	<cffunction name="initService" access="public" returntype="any" output="true" hint="I invoke the service.">
+	<cffunction name="initService" access="public" returntype="any" output="true" hint="I initialize a service. I store it in the Application scope if you tell me to.">
 		<cfargument name="serviceName" type="string" required="true" hint="" />
 		<cfargument name="load" type="boolean" required="true" default="true" />
 		<cfset var lfront = structNew() />
@@ -239,7 +244,7 @@
 			<cfreturn application.lfront.model[arguments.componentName] />
 		<cfelse>
 			<cfif arguments.useModelRoot>
-				<cfset lfront.component = createObject("component","#getSetting('modelRoot')#.#arguments.componentName#") />
+				<cfset lfront.component = createObject("component","#application.lfront.settings.modelRoot#.#arguments.componentName#") />
 			<cfelse>
 				<cfset lfront.component = createObject("component",arguments.componentName) />
 			</cfif>
@@ -287,11 +292,6 @@
 		<cfset var relo = getSetting("eventVariable") />
 		<cfsavecontent variable="relo"><cfoutput><script>location.href = "./?#relo#=#arguments.event#<cfif structKeyExists(arguments,"qstring")>&#arguments.qstring#</cfif>";</script></cfoutput></cfsavecontent>
 		<cfreturn trim(relo) />
-	</cffunction>
-
-	<cffunction name="getSetting" access="public" returnType="any" hint="I get a setting.">
-		<cfargument name="setting" type="string" required="true" hint="I am the setting I want to retrieve." />
-		<cfreturn application.lfront.settings[arguments.setting]>
 	</cffunction>
 
 </cfcomponent>
