@@ -1,7 +1,7 @@
 <cfcomponent displayname="securityService" extends="org.lightfront.lightfront" output="false" hint="Security Service">
 
 	<cffunction name="setUserService" returntype="Any">
-		<cfset variables.userService = application.lfront.service.userService />
+		<cfset variables.userService = initService("user.user") />
 	</cffunction>
 
 	<cffunction name="getUserService" returntype="Any">
@@ -9,7 +9,7 @@
 			<cfset setUserService() />
 		</cfif>
 		<cfreturn variables.userService />
-	</cffunction> 
+	</cffunction>
 
 	<cffunction name="doLogin" returntype="boolean">
 		<cfargument name="username" type="String" required="true" />

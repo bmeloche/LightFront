@@ -1,5 +1,136 @@
-<cfcomponent displayname="baseObject" hint="I am a helper for service CFCs." output="false">
+<cfcomponent displayname="baseObject" hint="I am a helper for model CFCs." output="false">
 
+	<cffunction name="initStatusOrCategoryAsStruct" access="public" returntype="struct" output="false">
+		<cfargument name="tableName" type="string" required="true" hint="I am the table name.">
+		<cfargument name="tableType" type="string" required="true" hint="I am either a status table or a category table. Category tables don't have values.">
+		<cfargument name="ID" type="numeric" required="true" default="0">
+		<cfargument name="Name" type="string" required="true" default="">
+		<cfargument name="Active" type="boolean" required="true" default="false">
+		<cfargument name="Value" type="numeric" required="false">
+		<cfscript>
+			var local = structNew();
+			if (structKeyExists(arguments,"Value") AND arguments.tableType EQ "status") {
+				local.Value = arguments.Value;
+			}
+			local.ID = arguments.ID;
+			local.Name = arguments.Name;
+			local.Active = arguments.Active;
+			local.tableName = arguments.tableName;
+			return local;
+		</cfscript>
+	</cffunction>
+
+	<cffunction name="createStatusCategory" access="public" output="false" returntype="struct">
+		<cfargument name="tableName" type="string" required="true" hint="I am the table name.">
+		<cfargument name="tableType" type="string" required="true" hint="I am either a status table or a category table. Category tables don't have values.">
+		<cfargument name="ID" type="numeric" required="true" default="0">
+		<cfargument name="Name" type="string" required="true" default="">
+		<cfargument name="Active" type="boolean" required="true" default="false">
+		<cfargument name="Value" type="numeric" required="false">
+		<cfset var qCreate = "">
+		<cfset var resultStruct = structNew()>
+		<cftry>
+			<cfquery name="qCreate" datasource="#application.dsn#">
+				INSERT INTO #arguments.tableName#
+					(
+					<cfif arguments.tableType EQ "status">
+						#arguments.tableName#Value,
+					</cfif>
+					#arguments.tableName#Name,
+					#arguments.tableName#Active
+					)
+				VALUES
+					(
+					<cfif arguments.tableType EQ "status">
+						<cfqueryparam value="#arguments.Value#" CFSQLType="cf_sql_integer" null="#not len(arguments.Value)#">,
+					</cfif>
+					<cfqueryparam value="#arguments.Name#" CFSQLType="cf_sql_varchar" null="#not len(arguments.Name)#" />,
+					<cfqueryparam value="#arguments.Active#" CFSQLType="cf_sql_bit" null="#not len(arguments.Active)#" />
+					)
+				SELECT @@IDENTITY AS 'ID'
+			</cfquery>
+			<cfset resultStruct.result = true>
+			<cfset resultStruct.ID = qCreate.ID>
+			<cfcatch type="any">
+				<cfset resultStruct.result = false>
+				<cfset resultStruct.error = cfcatch>
+				<cfset resultStruct.ID = 0>
+			</cfcatch>
+		</cftry>
+		<cfreturn resultStruct />
+	</cffunction>
+
+	<cffunction name="getStatusCategoryAsQuery" access="public" returntype="query" hint="I return one or more status or category table records.">
+		<cfargument name="tableName" type="string" required="true" hint="I am the table name.">
+		<cfargument name="tableType" type="string" required="true" hint="I am either a status table or a category table. Category tables don't have values.">
+		<cfargument name="ID" type="numeric" required="false" />
+		<cfargument name="Name" type="string" required="false" />
+		<cfargument name="Value" type="numeric" required="false" />
+		<cfargument name="Active" type="numeric" required="false" />
+		<cfargument name="OrderBy" type="string" required="false" />
+		<cfset var tmpQry = "" />
+		<cfquery name="tmpQry" datasource="#application.dsn#">
+			SELECT
+				#arguments.tableName#ID,
+				<cfif arguments.tableType EQ "status">
+					#arguments.tableName#Value,
+				</cfif>
+
+				#arguments.tableName#Name,
+				#arguments.tableName#Active
+			FROM
+				#arguments.tableName#
+			WHERE 0 = 0
+		<cfif structKeyExists(arguments,"ID") AND len(arguments.ID) GT 0>
+			AND	#arguments.tableName#ID = <cfqueryparam value="#arguments.ID#" CFSQLType="cf_sql_integer" />
+		</cfif>
+		<cfif structKeyExists(arguments,"Value") AND len(arguments.Value) GT 0>
+			AND	#arguments.tableName#Value = <cfqueryparam value="#arguments.Value#" CFSQLType="cf_sql_integer" />
+		</cfif>
+		<cfif structKeyExists(arguments,"Name") AND len(arguments.Name) GT 0>
+			AND	#arguments.tableName#Name = <cfqueryparam value="#arguments.Name#" CFSQLType="cf_sql_varchar" />
+		</cfif>
+		<cfif structKeyExists(arguments,"Active") AND len(arguments.Active) GT 0>
+			AND	#arguments.tableName#Active = <cfqueryparam value="#arguments.Active#" CFSQLType="cf_sql_tinyint" />
+		</cfif>
+		<cfif structKeyExists(arguments, "orderby") AND len(arguments.orderBy) GT 0>
+			ORDER BY #arguments.OrderBy#
+		</cfif>
+		</cfquery>
+		<cfreturn tmpQry />
+	</cffunction>
+
+	<cffunction name="updateStatusCategory" access="public" output="false" returntype="struct">
+		<cfargument name="tableName" type="string" required="true" hint="I am the table name.">
+		<cfargument name="tableType" type="string" required="true" hint="I am either a status table or a category table. Category tables don't have values.">
+		<cfargument name="ID" type="numeric" required="true" default="0">
+		<cfargument name="Name" type="string" required="true" default="">
+		<cfargument name="Active" type="boolean" required="true" default="false">
+		<cfargument name="Value" type="numeric" required="false">
+		<cfset var tmpQry = "">
+		<cfset var resultStruct = structNew()>
+		<cftry>
+			<cfquery name="tmpQry" datasource="#application.dsn#">
+				UPDATE #arguments.tableName#
+				SET
+					<cfif arguments.tableType EQ "status" AND structKeyExists(arguments,"Value")>
+						#arguments.tableName#Value = <cfqueryparam value="#arguments.Value#" CFSQLType="cf_sql_integer" null="#not len(arguments.Value)#">,
+					</cfif>
+					#arguments.tableName#Name = <cfqueryparam value="#arguments.Name#" CFSQLType="cf_sql_varchar" null="#not len(arguments.Name)#" />,
+					#arguments.tableName#Active = <cfqueryparam value="#arguments.Active#" CFSQLType="cf_sql_bit" null="#not len(arguments.Active)#" />
+				WHERE #arguments.tableName#ID = <cfqueryparam value="#arguments.ID#" CFSQLType="cf_sql_integer" null="#not len(arguments.ID)#" />
+			</cfquery>
+			<cfset resultStruct.result = true>
+			<cfset resultStruct.ID = arguments.ID>
+			<cfcatch type="any">
+				<cfset resultStruct.result = false>
+				<cfset resultStruct.error = cfcatch>
+				<cfset resultStruct.ID = 0>
+				<cfset resultStruct.args = arguments>
+			</cfcatch>
+		</cftry>
+		<cfreturn resultStruct />
+	</cffunction>
 
 	<cffunction name="createGUID" access="public" returntype="guid" output="false" hint="Returns a UUID in the Microsoft form.">
 		<cfreturn insert("-",createUUID(),23)>

@@ -19,14 +19,11 @@
 			this.ormsettings.logSQL = true;
 			this.ormsettings.autorebuild = true;
 		}
-		/*The "lf" mapping is designed to make LightFront work at both the root of your applications as well as in a subdirectory.
+		/*The "lfront" mapping is designed to make LightFront work at both the root of your applications as well as in a subdirectory.
 		* It's used to find your controllers and views inside LightFront itself.*/
-		this.mappings["/lf"] = expandPath(".");
+		this.mappings["/lfront"] = expandPath(".");
 		/*If you have your controller and view folders are outside of your LightFront application folder (this folder), you will need to
-		* add mappings to lf/controller and lf/view (match the cfcControllerDirectory and viewDirectory setting name.)*/
-		//this.mappings["/lf/model"] = expandPath("./model");
-		//this.mappings["/lf/controller"] = expandPath("./controller");
-		//this.mappings["/lf/view"] = expandPath("./view");
+		* add mappings to /lfront/controller and /lfront/view (match the cfcControllerDirectory and viewDirectory setting name.)*/
 	</cfscript>
 
 	<!--- PUBLIC FUNCTIONS --->
@@ -38,9 +35,8 @@
 		<cfset application.thiswas = this />
 		<cfset application.lfront = structNew() />
 		<cfset application.lfront.settings = loadSettings(setCustomLightFrontSettings()) />
-		<cfset application.lfront.service = loadServices() />
+		<cfset application.lfront.initComponent = initComponent />
 		<cfset application.lfront.ctrl = loadControllers() />
-		<!---<cfset application.lfront.ctrl = local.cfcs.controllers />--->
 		<cfset application.startTime = now() />
 		<cfset this.lfLoadTime = getTickCount() - this.lfLoadTime />
 		<!--- If you need to set anything in the Application scope after starting Lightfront, set it here. --->
@@ -72,7 +68,7 @@
 		</cfif>
 		<cfif isLightfront(arguments.targetPage)>
 			<!--- Call Lightfront to initiate the request. --->
-			<cfset loadLightFrontRequest() />
+			<cfset loadRequest() />
 		<cfelse>
 			<!--- Add any alternate types of requests here, if needed that will not follow Lightfront conventions. --->
 		</cfif>
@@ -119,13 +115,14 @@
 
 	<cffunction name="setCustomLightFrontSettings" access="private" returntype="struct" hint="I set LightFront application settings.">
 		<cfscript>
-			var lfs = structNew();
-			lfs.postEvent = "layout.main";
-			lfs.postEventRequest = "final";
-			lfs.assignments = structNew();
-			lfs.assignments.security = "main";
-			lfs.assignments.admin = "main";
-			return lfs;
+			var settings = structNew();
+			settings.postEvent = "layout.main";
+			settings.postEventRequest = "final";
+			settings.assignments = structNew();
+			settings.assignments.security = "main";
+			settings.assignments.admin = "main";
+			settings.serviceSuffix = "Service";
+			return settings;
 		</cfscript>
 	</cffunction>
 

@@ -1,7 +1,7 @@
 <cfcomponent displayname="main" extends="org.lightfront.lightfront" output="false" hint="home controller">
 
-	<cfset securityService = initService('security') />
-	<cfset categoryService = initService('category') />
+	<cfset securityService = initService('security.security') />
+	<cfset categoryService = initService('category.category') />
 
 	<cffunction name="onMissingMethod" returntype="string" output="false">
 		<cfargument name="missingMethodName" type="string" required="true" hint="The name of the missing method." />
@@ -37,7 +37,7 @@
 
 
 	<cffunction name="showLogin" returntype="String" output="false">
-		<cfreturn displayView("security.login") />
+		<cfreturn displayView("securite.login") />
 	</cffunction>
 
 	<cffunction name="doLogin" returntype="string" output="false">

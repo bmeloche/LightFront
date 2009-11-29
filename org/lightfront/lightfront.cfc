@@ -219,12 +219,12 @@
 		<cfargument name="serviceName" type="string" required="true" hint="" />
 		<cfargument name="load" type="boolean" required="true" default="true" />
 		<cfset var lfront = structNew() />
-		<cfset setSettings() />
+		<cfset lfront.settings = application.lfront.settings />
 		<cfif structKeyExists(application.lfront,"service") AND structKeyExists(application.lfront.service,arguments.serviceName)>
 			<cfreturn application.lfront.service[arguments.serviceName] />
 		<cfelse>
-			<cfset lfront.service = iif(structKeyExists(settings,"servicePrefix"),DE(settings.servicePrefix),DE("")) & arguments.serviceName & iif(structKeyExists(settings,"serviceSuffix"),DE(settings.serviceSuffix),DE("")) />
-			<cfset lfront.serviceComponent = createObject("component","#settings.serviceRoot#.#lfront.service#") />
+			<cfset lfront.service = iif(structKeyExists(lfront.settings,"servicePrefix"),DE(lfront.settings.servicePrefix),DE("")) & arguments.serviceName & iif(structKeyExists(lfront.settings,"serviceSuffix"),DE(lfront.settings.serviceSuffix),DE("")) />
+			<cfset lfront.serviceComponent = createObject("component","#lfront.settings.serviceRoot#.#lfront.service#") />
 			<cfif arguments.load>
 				<cfif NOT structKeyExists(application.lfront,"service")>
 					<cfset application.lfront.service = structNew() />

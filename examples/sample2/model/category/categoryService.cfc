@@ -1,4 +1,4 @@
-<cfcomponent displayname="categoryService" extends="org.lightfront.extensions.baseService" output="false">
+<cfcomponent displayname="categoryService" extends="lfront.extensions.baseService" output="false">
 
 	<!--- TODO: Later update.
 	<cfset variables.thisInstance = arrayNew(1) />
@@ -62,7 +62,7 @@
 			var primaryKeysMap = {
 				categoryID = categoryID
 			};
-			return entityload("category",primaryKeysMap,true);
+			return entityLoad("category",primaryKeysMap,true);
 		</cfscript>
 	</cffunction>
 
@@ -79,7 +79,7 @@
 		<cfreturn ORMExecuteQuery("select count(*) from category",true) />
 	</cffunction>
 
-	
+
 	<cffunction name="validateCategory" access="public" returntype="array" output="false">
 		<cfargument name="item" type="struct" required="false" default="#structNew()#" />
 		<cfset var errors = arrayNew(1) />
@@ -119,7 +119,7 @@
 		</cfif>
 		<cfreturn errors />
 	</cffunction>
-	
+
 	<!---- create ---->
 	<cffunction name="create" returntype="any">
 		<cfargument name="categoryID" type="numeric" required="true" />
@@ -145,7 +145,7 @@
 	      	<cfelseif IsDefined("qry.KEY_VALUE")>
 	            <cfset identityCol = qry.KEY_VALUE>
 	      	</cfif>
-	  	</cfif>	
+	  	</cfif>
 		<!---- return IdentityCol ---->
 		<cfreturn IdentityCol />
 	</cffunction>
@@ -157,7 +157,7 @@
 		<cfset var struct = structNew() />
 		<cfset var i = 1 />
 		<cfset var qry = "" />
-		
+
 		<cfquery name="qry" datasource="lightfront_sample2">
 			SELECT categoryid,categoryname,categorystatus
 			FROM category
@@ -176,7 +176,7 @@
 	<cffunction name="update" returntype="void">
 		<cfargument name="categoryID" type="numeric" required="true" />
 		<cfargument name="categoryName" type="string" required="true" />
-		<cfargument name="categoryStatus" type="numeric" required="true" /> 
+		<cfargument name="categoryStatus" type="numeric" required="true" />
 		<cfset var qry = "" />
 		<!---- update database ---->
 		<cfquery name="qry" datasource="lightfront_sample2">
