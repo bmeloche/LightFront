@@ -35,15 +35,17 @@
 			<cfparam name="lfront.settings.defaultMethod" type="string" default="home" />
 			<cfparam name="lfront.settings.eventDelimiter" type="string" default="." />
 			<cfparam name="lfront.settings.eventVariable" type="string" default="do" />
-			<cfparam name="lfront.settings.defaultPage" type="string" default="index.cfm" />
-			<cfparam name="lfront.settings.viewExtension" type="string" default=".cfm" />
+			<cfparam name="lfront.settings.defaultEntry" type="string" default="index" />
+			<cfparam name="lfront.settings.cfmExtension" type="string" default="cfm" />
+			<cfparam name="lfront.settings.defaultPage" type="string" default="#lfront.settings.defaultEntry#.#lfront.settings.cfmExtension#" />
+			<cfparam name="lfront.settings.defaultRequestVar" type="string" default="eventResult" />
 			<cfset lfront.settings.defaultEvent = lfront.settings.defaultClass & lfront.settings.eventDelimiter & lfront.settings.defaultMethod />
 			<cfif NOT structKeyExists(lfront.settings,"dump")>
 				<cfset lfront.settings.dump = structNew() />
 				<cfset lfront.settings.dump.allow = true />
 				<cfset lfront.settings.dump.password = "show" />
 			<cfelseif NOT structKeyExists(lfront.settings.dump,"allow") OR NOT structKeyExists(lfront.settings.dump,"password")>
-				<cfthrow message="Dump settings only partially provided. Missing allow or password setting." detail="dump.allow and/or dump.password is not provided in the application." />
+				<cfthrow message="Dump settings are only partially provided. Missing allow or password setting." detail="dump.allow and/or dump.password is not provided in the application." />
 			</cfif>
 			<cfreturn lfront.settings />
 			<cfcatch type="Any">
@@ -111,7 +113,7 @@
 
 	<!--- Framework Functions --->
 	<cffunction name="loadRequest" hint="I pull the page request exclusively into LightFront. This is NOT used in a no-hub setup, like where you aren't routing all requests through index.cfm.">
-		<cfargument name="requestVar" type="string" required="true" default="eventResult" />
+		<cfargument name="requestVar" type="string" required="true" default="#application.lfront.settings.defaultRequestVar#" />
 		<cfset setSettings() />
 		<cfif NOT structKeyExists(request,"attributes")>
 			<!--- Create the LightFront request, if the request doesn't exist. An example would be if you are calling from a proxy. --->
@@ -138,21 +140,27 @@
 		<!--- Run pre-event, if one is specified in the configs. Store it in a separate request variable if one is defined. --->
 		<cfif structKeyExists(settings,"preEvent")>
 			<cfif structKeyExists(settings,"preEventRequest")>
-				<cfset request[settings.preEventRequest] = callEvent(settings.preEvent) />
+				<cfset loadAction(settings.preEventRequest,settings.preEvent) />
 			<cfelse>
 				<cfset request[arguments.requestVar] = request[arguments.requestVar] & callEvent(settings.preEvent) />
 			</cfif>
 		</cfif>
 		<!--- Run event. --->
 		<cfif listLen(request.attributes[settings.eventVariable],settings.eventDelimiter) GT 2>
+			<!--- That means you want to run a view as an action (event). --->
 			<cfset request[arguments.requestVar] = request[arguments.requestVar] & displayView(request.attributes[settings.eventVariable]) />
 		<cfelse>
-			<cfset request[arguments.requestVar] = request[arguments.requestVar] & callEvent(request.attributes[settings.eventVariable],request.attributes) />
+			<cfif arguments.requestVar NEQ application.lfront.settings.defaultRequestVar>
+				<!--- In other words, you passed something other than the default for the request variable into loadRequest(). You'd want to do this in an AJAX/AMF request. You'll want to handle this in your onRequestEnd() or somewhere else in your application. Run loadAction() instead of callAction(). Basically, you're running this as a pre-Action or post-Action. --->
+				<cfset loadAction(arguments.requestVar,request.attributes[settings.eventVariable],request.attributes)>
+			<cfelse>
+				<cfset request[arguments.requestVar] = request[arguments.requestVar] & callEvent(request.attributes[settings.eventVariable],request.attributes) />
+			</cfif>
 		</cfif>
 		<!--- Run post-event, if one is specified in the configs. Store it in a separate request variable if one is defined. --->
 		<cfif structKeyExists(settings,"postEvent")>
 			<cfif structKeyExists(settings,"postEventRequest") AND settings.postEvent NEQ arguments.requestVar>
-				<cfset request[settings.postEventRequest] = callEvent(settings.postEvent) />
+				<cfset loadAction(settings.postEventRequest,settings.postEvent) />
 			<cfelse>
 				<cfset request[arguments.requestVar] = request[arguments.requestVar] & callEvent(settings.postEvent) />
 			</cfif>
@@ -162,14 +170,15 @@
 	<cffunction name="loadAction" access="public" returntype="void" output="false" hint="I do a callAction() and save the result to the request scope.">
 		<cfargument name="requestVar" type="string" required="true" hint="I am the request variable name to save the action to." />
 		<cfargument name="action" type="any" required="true" hint="I am the action to be called." />
-		<cfargument name="args" type="struct" required="false" hint="I am used to pass in arguments directly to an action." />
+		<cfargument name="args" type="struct" required="false" default="#request.attributes#" hint="I am used to pass in arguments directly to an action." />
 		<cfset request[arguments.requestVar] = callAction(action=arguments.action,args=arguments.args) />
 	</cffunction>
 
 	<cffunction name="callAction" access="public" returntype="any" output="true" hint="I call the action (do). I will replace callEvent() in 0.4.4. I have been provided for forward compatibility.">
 		<cfargument name="action" type="string" required="true" hint="I am the action to be called." />
 		<cfargument name="args" type="any" required="false" hint="I am used to pass in arguments directly to an action." />
-		<cfreturn callEvent(event=arguments.action,args=arguments.args) />
+		<cfset arguments.event = arguments.action />
+		<cfreturn callEvent(argumentCollection=arguments) />
 	</cffunction>
 
 	<cffunction name="callEvent" access="public" returntype="any" output="true" hint="I invoke the event. This function will be deprecated in 0.4.4, and replaced by callAction().">
@@ -263,10 +272,10 @@
 		<cfargument name="content" type="any" required="false" hint="Use this if you want to pass content to the view." />
 		<cfset var lfront = structNew() />
 		<cfset arguments.viewName = replaceNoCase(arguments.viewName,getSetting('eventDelimiter'),"/","ALL") />
-		<cfset lfront.viewFile = arguments.viewName & getSetting("viewExtension") />
+		<cfset lfront.viewFile = arguments.viewName & "." & getSetting("cfmExtension") />
 		<cfset lfront.viewName = getSetting("viewDirectory") & lfront.viewFile />
 		<cfset lfront.renderedView = "" />
-		<cfset lfront.viewError = "LightFront Error: #arguments.viewName# is not found! Looking for #lfront.viewName#." />
+		<cfset lfront.viewError = "LightFront Error: #arguments.viewName# is not found! Looking for #lfront.viewName#. #expandPath(lfront.viewName)#" />
 		<cfif FileExists(ExpandPath(lfront.viewName))>
 			<cfsavecontent variable="lfront.renderedView"><cfinclude template="#lfront.viewName#" /></cfsavecontent>
 		<cfelseif structKeyExists(application.lfront.settings,"assignments") AND structKeyExists(application.lfront.settings,"switch") AND structKeyExists(application.lfront.settings.switch,"switchPage")>
@@ -288,10 +297,19 @@
 
 	<cffunction name="relocate" access="public" returntype="string" output="false" hint="I redirect to another event.">
 		<cfargument name="event" type="string" required="true" />
-		<cfargument name="qstring" type="string" required="false" />
-		<cfset var relo = getSetting("eventVariable") />
-		<cfsavecontent variable="relo"><cfoutput><script>location.href = "./?#relo#=#arguments.event#<cfif structKeyExists(arguments,"qstring")>&#arguments.qstring#</cfif>";</script></cfoutput></cfsavecontent>
+		<cfargument name="qstring" type="string" required="true" default="" />
+		<cfsavecontent variable="relo"><cfoutput><script>location.href = "#link(action=arguments.event,qstring=arguments.qstring)#";</script></cfoutput></cfsavecontent>
 		<cfreturn trim(relo) />
+	</cffunction>
+
+	<cffunction name="link" access="public" returntype="string" output="false" hint="I make a new link.">
+		<cfargument name="action" type="string" required="true" />
+		<cfargument name="qstring" type="string" required="true" default="" />
+		<cfif arguments.qstring NEQ "">
+			<cfset arguments.qstring = "&" & arguments.qstring />
+		</cfif>
+		<!---<cfreturn "./" & getSetting("defaultPage") & "?" & getSetting("eventVariable") & "=" & arguments.action & arguments.qstring /> --->
+		<cfreturn "./" & application.lfront.settings.defaultPage & "?" & getSetting("eventVariable") & "=" & arguments.action & arguments.qstring />
 	</cffunction>
 
 </cfcomponent>
