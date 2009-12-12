@@ -22,7 +22,7 @@
 			<br />
 			You can also use a / instead of your actionDelimiter. home/welcome also works in LightFront.<br />
 			<br />
-			Another added feature is the ability for displayViews, and hence actions, to go more than two levels deep. <a href="/?do=test.threedeep.test">Try this for an example</a>.
+			Another added feature is the ability for displayViews, and hence actions, to go more than two levels deep. <a href="#link('test.threedeep.test')#">Try this for an example</a>.
 		</td>
 	</tr>
 	<tr valign="top">

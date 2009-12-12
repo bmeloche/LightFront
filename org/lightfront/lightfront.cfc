@@ -235,10 +235,13 @@
 			<cfset lfront.service = iif(structKeyExists(lfront.settings,"servicePrefix"),DE(lfront.settings.servicePrefix),DE("")) & arguments.serviceName & iif(structKeyExists(lfront.settings,"serviceSuffix"),DE(lfront.settings.serviceSuffix),DE("")) />
 			<cfset lfront.serviceComponent = createObject("component","#lfront.settings.serviceRoot#.#lfront.service#") />
 			<cfif arguments.load>
-				<cfif NOT structKeyExists(application.lfront,"service")>
-					<cfset application.lfront.service = structNew() />
-				</cfif>
-				<cfset application.lfront.service[arguments.serviceName] = lfront.serviceComponent />
+				<!--- Lock & Load!!! --->
+				<cflock scope="Application" timeout="30" throwontimeout="true">
+					<cfif NOT structKeyExists(application.lfront,"service")>
+						<cfset application.lfront.service = structNew() />
+					</cfif>
+					<cfset application.lfront.service[arguments.serviceName] = lfront.serviceComponent />
+				</cflock>
 			</cfif>
 			<cfreturn lfront.serviceComponent />
 		</cfif>
@@ -258,10 +261,13 @@
 				<cfset lfront.component = createObject("component",arguments.componentName) />
 			</cfif>
 			<cfif arguments.load>
-				<cfif NOT structKeyExists(application.lfront,"model")>
-					<cfset application.lfront.model = structNew() />
-				</cfif>
-				<cfset application.lfront.model[arguments.componentName] = lfront.component />
+				<!--- Lock & Load!!! --->
+				<cflock scope="Application" timeout="30" throwontimeout="true">
+					<cfif NOT structKeyExists(application.lfront,"model")>
+						<cfset application.lfront.model = structNew() />
+					</cfif>
+					<cfset application.lfront.model[arguments.componentName] = lfront.component />
+				</cflock>
 			</cfif>
 			<cfreturn lfront.component />
 		</cfif>
@@ -308,8 +314,7 @@
 		<cfif arguments.qstring NEQ "">
 			<cfset arguments.qstring = "&" & arguments.qstring />
 		</cfif>
-		<!---<cfreturn "./" & getSetting("defaultPage") & "?" & getSetting("eventVariable") & "=" & arguments.action & arguments.qstring /> --->
-		<cfreturn "./" & application.lfront.settings.defaultPage & "?" & getSetting("eventVariable") & "=" & arguments.action & arguments.qstring />
+		<cfreturn "./" & getSetting("defaultPage") & "?" & getSetting("eventVariable") & "=" & arguments.action & arguments.qstring />
 	</cffunction>
 
 </cfcomponent>

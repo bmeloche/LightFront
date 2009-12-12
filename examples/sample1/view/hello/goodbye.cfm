@@ -14,5 +14,5 @@
 	&lt;/cfswitch&gt;
 &lt;/cfoutput&gt;</span></pre>
 <p>I am a good example of how LightFront can use a legacy application and even let you add to it. It respects this as the switch circuit.</p>
-<p>Now, <a href="./?do=switch.solong">say so long</a>! This will give you a friendly error message.</p>
+<p>Now, <a href="#link('switch.solong')#">say so long</a>! This will give you a friendly error message.</p>
 <p>What if in your old Fusebox application you don't use &quot;do&quot;? No problem. Check setSettingsForLightFront() in Application.cfc and change local.eventVariable to the variable name you need.</p>

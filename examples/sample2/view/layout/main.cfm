@@ -9,19 +9,19 @@
 	<h1>The LightFront Framework - Sample 2 - Basic Site w/MVC</h1>
 	<div id="navbar">
 		<div id="menu">
-			<a href="./#settings.defaultPage#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./#settings.defaultPage#?do=main.about">About Us</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./#settings.defaultPage#?do=main.staff">Staff</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./#settings.defaultPage#?do=main.contact">Contact Us</a>
+			<a href="#link(settings.defaultPage')#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="#link('main.about')#">About Us</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="#link('main.staff')#">Staff</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="#link('main.contact')#">Contact Us</a>
 			<cfif isDefined("cookie") AND structKeyExists(cookie,"username")>
-					&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="./#settings.defaultPage#?do=admin.welcome">Admin</a>
+					&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#link('admin.welcome')#">Admin</a>
 			</cfif>
 		</div>
 		<div id="loginmenu">
 			<cfif isDefined("cookie") AND structKeyExists(cookie,"username")>
-				Welcome, #cookie.username# <a href="./?do=logout">Logout</a>
+				Welcome, #cookie.username# <a href="#link('logout')#">Logout</a>
 			<cfelse>
-				<a href="./#settings.defaultPage#?do=security.login">Login</a>
+				<a href="#link('login')#">Login</a>
 			</cfif>
 		</div>
 		<div style="clear: both;"></div>

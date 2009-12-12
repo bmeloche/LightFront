@@ -13,11 +13,11 @@
 	<cfoutput>
 		<cfloop from="1" to="#arrayLen(arguments.content.categoryList)#" index="i"> 
 		<tr>
-			<td><a href="./?do=admin.editcategory&id=#arguments.content.categoryList[i].getCategoryID()#">#arguments.content.categoryList[i].getCategoryID()#</a></td>
+			<td><a href="#link('admin.editcategory')#&id=#arguments.content.categoryList[i].getCategoryID()#">#arguments.content.categoryList[i].getCategoryID()#</a></td>
 			<td>#arguments.content.categoryList[i].getCategoryName()#</td>
 		</tr>
 		</cfloop>
 	</cfoutput>
 </cfif>
 </table>
-<p><a href="./?do=admin.editcategory">Add New Category</a></p>
+<p><a href="#link('admin.editcategory')#">Add New Category</a></p>

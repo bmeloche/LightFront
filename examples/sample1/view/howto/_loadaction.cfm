@@ -34,6 +34,6 @@
 		<td>Optional</td>
 		<td>
 			Any data you want to pass into the action.
-			Each action can also access request.attributes, so you don't need to pass in arguments unless you're passing in something not in the request scope (though this breaks encapsulation).</td>
+			Each action can also access request.attributes, so you don't need to pass in arguments unless you're passing in something not in the request scope (though this breaks encapsulation). Each action can also read forms, URL variables, or whatever you might pass into a request. Reading arguments.args is not a requirement.</td>
 	</tr>
 </table>
