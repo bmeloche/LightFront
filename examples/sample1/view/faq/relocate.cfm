@@ -11,13 +11,13 @@
 		<th>Description</th>
 	</tr>
 	<tr valign="top">
-		<td>event</td>
+		<td>action</td>
 		<td>string</td>
 		<td>Required</td>
 		<td>
-			The name of the event you want to call.<br /><br />
-			In multiple controllers or assigned classes:<br />
-			className + eventDelimiter + methodName<br />
+			The name of the action you want to call.<br /><br />
+			In multiple controllers or assigned controlleres:<br />
+			controllerName + actionDelimiter + actionName<br />
 			e.g. home.welcome
 		</td>
 	</tr>

@@ -16,19 +16,19 @@
 		<td>Required</td>
 		<td>
 			The name of the view you want to call.<br /><br />
-			In multiple controllers or assigned classes:<br />
-			className + eventDelimiter + methodName<br />
+			In multiple controllers or assigned controlleres:<br />
+			controllerName + actionDelimiter + actionName<br />
 			e.g. home.welcome<br />
 			<br />
-			You can also use a / instead of your eventDelimiter. home/welcome also works in LightFront.<br />
+			You can also use a / instead of your actionDelimiter. home/welcome also works in LightFront.<br />
 			<br />
-			Another added feature is the ability to go more than two levels deep. <a href="/?do=test.threedeep.test">Try this for an example</a>.
+			Another added feature is the ability to go more than two levels deep. <a href="#link('test.threedeep.test')#">Try this for an example</a>.
 		</td>
 	</tr>
 	<tr valign="top">
 		<td>content</td>
 		<td>any</td>
 		<td>Optional</td>
-		<td>Any data you want to pass into the view. This may be deprecated later. You can pass content to the view just by using the variables or the request scope.</td>
+		<td>Any data you want to pass into the view. You can pass content to the view just by using the variables or the request scope.</td>
 	</tr>
 </table>

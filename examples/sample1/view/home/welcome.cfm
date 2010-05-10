@@ -3,7 +3,6 @@
 	<div id="main_right">
 		<div><em>This application was written in LightFront!</em></div>
 		<p><a href="http://svn.lightfront.org/svn/lightfront/downloads/lightfront.zip"><strong>Download</strong></a> (.zip)</p>
-		<p><a href="http://svn.lightfront.org/svn/lightfront/downloads/LightFront_0.4.3.zip"><strong>Download Version 0.4.3</a> - The current branch in progress (fully functional core, only the skeleton and skeleton_verbose are certified.)</strong> (.zip)</p>
 		<p><a href="http://test.lightfront.org/skeleton/">View the LightFront skeleton application</a></p>
 		<p><a href="http://svn.lightfront.org/svn/lightfront">Browse the LightFront SVN repository</a></p>
 		<form action="http://groups.google.com/group/lightfront/boxsubscribe">

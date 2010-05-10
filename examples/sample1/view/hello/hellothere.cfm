@@ -1,8 +1,8 @@
-<h2>Hello! I am ./view/home/hello/hellothere.cfm!</h2>
-<cfif request.attributes.do IS "home.hello">
-	<h3>I was called as displayView("home/hello/hellothere")</h3>
-	<p>I can also be called <a href="./?do=home.hellovariant">this way</a>.</p>
-<cfelse>
-	<h3>I was called as displayView("home.hello.hellothere"), if "." is the event delimiter.</h3>
-	<p>I can also be called <a href="./?do=home.hello">this way.</a></p>
-</cfif>
+<h2>Hello! I am ./view/home/hellothere.cfm!</h2>
+<cfoutput>
+	<cfif request.attributes.do IS "home.hello">
+		<h3>I was called as displayView("home/hellothere")</h3>
+	<cfelseif structKeyExists(arguments,"content") AND structKeyExists(arguments.content,"onMissingMethod")>
+		<h3>I was called by onMissingMethod, looking for the action: #arguments.content.missingMethodArguments.args.do#.</h3>
+	</cfif>
+</cfoutput>

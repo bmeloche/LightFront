@@ -1,4 +1,4 @@
 <h2>I don't like all of my pages going through index.cfm or whatever I've called the default cfm page. Can I still use LightFront?</h2>
-<p>Yes, but... why? It is possible, but you will miss some functionality, and that use of LightFront is not supported or encouraged.</p>
-<p>If a user stays to a hub, it's good. If you bounce around, you will have additional complexity in your application.</p>
-<p>That might seem a tad harsh. If people want this functionality in LightFront, we'll work to fully support it in a later version.</p>
+<p>Yes, and in fact, the first production implementation of LightFront, which was an addition to an existing application, has this.</p>
+<p>Critical to do this is the use of an isLightFront() function in your Application.cfc to determine whether or not the request needs to be routed through LightFront. For pages that don't route directly through LightFront, isLightFront needs to be false. You can still use callAction() and displayView() by calling them directly in the page.</p>
+<p>While this implementation is possible, it's not recommended, as this can lead to spaghetti code. However, if you're maintaining an existing application, and you have to develop this way, you're welcomed to use LightFront this way. That said, LightFront may not always support this method, so please do so at some risk.</p>

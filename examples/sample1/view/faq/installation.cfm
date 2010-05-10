@@ -1,8 +1,9 @@
 <h2>How do I install LightFront?</h2>
 <p>You have a few options on how to install LightFront:</p>
 <ol>
-	<li>Install org/lightfront/lightfront.cfc at the root of your web server and install the rest of the files in the folder you want to run a LightFront application in. If you can install the entire application at the root, this is the easiest install.</li>
-	<li>Create a mapping in your ColdFusion admin to /org/lightfront to the folder where you place lightfront.cfc and then install the skeleton application (TODO: For now, use the sample application) in the folder you want your LightFront application to be in.</li>
-	<li>Create an application mapping in your Application.cfc to /org/lightfront to the location where you place lightfront. HOWEVER, this will mean you have to change the extends value in the cfcomponent tag in Application.cfc. If you take this route, it is recommended you change it to extends=&quot;lightfront&quot; and place lightfront.cfc in the same directory as Application.cfc. Your extends can't be &quot;org.lightfront.lightfront&quot; in that tag if you are defining that mapping in Application.cfc, as the extends value won't be recognized.</li>
+	<li>Create an Application.cfc. It should extend lightfront.cfc, whereever you decide to put it. You may want to take either the skeleton or the verbose skeleton as your Application.cfc template.</li>
+	<li>Install lightfront.cfc at the root of your web application. You can also install lightfront.cfc elsewhere, just make sure Application.cfc extends it.</li>
+	<li>In your Application.cfc, create an application mapping called &quot;lfront&quot; application's root. Alternatively, or if you are using ColdFusion MX 7, you may need to create a mapping in your ColdFusion administrator.</li>
 	<li>Unsupported in the current version <em>(experimental)</em>: Remove the extends parameter from the cfcomponent tag, and then initialize lightfront.cfc in your onApplicationStart() as application.lightfront. <em>(Note: We may offer an install like this in later versions if there's a demand for it.)</em></li>
+	<li>If using Application.cfm instead of Application.cfc, it may be possible to use LightFront, but that use is currently unsupported.</li>
 </ol>

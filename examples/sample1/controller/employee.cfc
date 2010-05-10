@@ -1,4 +1,4 @@
-<cfcomponent displayname="employee" extends="org.lightfront.lightfront" hint="I am the employee controller.">
+<cfcomponent displayname="employee" extends="lfront.lightfront" hint="I am the employee controller.">
 
 	<cfset employeeService = initService("employee") />
 

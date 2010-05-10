@@ -68,7 +68,6 @@
 
 	<cffunction name="update" access="public" output="false" returntype="boolean">
 		<cfargument name="employee" type="model.employee" required="true" />
-
 		<cfset var qUpdate = "" />
 		<cftry>
 			<cfquery name="qUpdate" datasource="#variables.dsn#">
@@ -90,7 +89,6 @@
 
 	<cffunction name="delete" access="public" output="false" returntype="boolean">
 		<cfargument name="employee" type="model.employee" required="true" />
-
 		<cfset var qDelete = "">
 		<cftry>
 			<cfquery name="qDelete" datasource="#variables.dsn#">
@@ -106,7 +104,6 @@
 
 	<cffunction name="exists" access="public" output="false" returntype="boolean">
 		<cfargument name="employee" type="model.employee" required="true" />
-
 		<cfset var qExists = "">
 		<cfquery name="qExists" datasource="#variables.dsn#" maxrows="1">
 			SELECT count(1) as idexists
@@ -123,20 +120,17 @@
 
 	<cffunction name="save" access="public" output="false" returntype="boolean">
 		<cfargument name="employee" type="model.employee" required="true" />
-
 		<cfset var success = false />
 		<cfif exists(arguments.employee)>
 			<cfset success = update(arguments.employee) />
 		<cfelse>
 			<cfset success = create(arguments.employee) />
 		</cfif>
-
 		<cfreturn success />
 	</cffunction>
 
 	<cffunction name="queryRowToStruct" access="private" output="false" returntype="struct">
 		<cfargument name="qry" type="query" required="true">
-
 		<cfscript>
 			/**
 			 * Makes a row of a query into a structure.

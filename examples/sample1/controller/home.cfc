@@ -1,6 +1,13 @@
-<cfcomponent displayname="home" extends="org.lightfront.lightfront" output="false" hint="home controller">
+<cfcomponent displayname="home" extends="lfront.lightfront" output="false" hint="home controller">
 
 	<cfset securityService = initService("security") />
+
+	<cffunction name="onMissingMethod" returntype="string" output="true">
+		<cfargument name="missingMethodArguments" type="any" />
+		<cfargument name="missingMethodName" type="any" />
+		<cfset arguments.onMissingMethod = true />
+		<cfreturn displayView("hello/" & arguments.missingMethodName,arguments) />
+	</cffunction>
 
 	<cffunction name="init" returntype="string" output="true">
 		<cfreturn welcome() />
@@ -24,12 +31,12 @@
 			} else {
 				lfront.username = "";
 			}
-			lfront.loc = displayView("hello/hellothere") & callEvent("employee.getEmployee",lfront);
+			lfront.loc = displayView("hello/hellothere") & callAction("employee.getEmployee",lfront);
 		</cfscript>
 		<cfreturn lfront.loc />
 	</cffunction>
 
-	<cffunction name="hellovariant" returntype="string" output="true">
+	<cffunction name="hello" returntype="string" output="true">
 		<cfargument name="args" type="struct" required="false" />
 		<cfscript>
 			var lfront = structNew();
@@ -38,22 +45,23 @@
 			} else {
 				lfront.username = "";
 			}
-			lfront.employeeInfo = callEvent("employee.getEmployee",lfront);
+			lfront.employeeInfo = callAction("employee.getEmployee",lfront);
 			return displayView("hello.hellothere",lfront);
 		</cfscript>
 	</cffunction>
 
 	<cffunction name="helloanon" returntype="string" output="true">
+		<cfargument name="args" type="struct" required="false" />
 		<cfset var lfront = structNew() />
-		<cfset lfront.loc = "<h1>Hello! I come from home.cfc helloanon!</h1>" & callEvent("employee.getEmployee") />
-		<cfset lfront.loc = callEvent("home.welcome",lfront.loc) />
+		<cfset lfront.loc = "<h1>Hello! I come from home.cfc helloanon!</h1>" & callAction("employee.getEmployee") />
+		<cfset lfront.loc = callAction("home.welcome",lfront.loc) />
 		<cfreturn lfront.loc />
 	</cffunction>
 
 	<cffunction name="admin_home" hint="I display a reassigned event.">
 		<cfset var lfront = structNew() />
-		<cfset lfront.loc = "<h1>Hello! I come from home.cfc admin_home()! I used to be admin.home but I was reassigned!</h1>" & callEvent("employee.getEmployee") />
-		<cfset lfront.loc = callEvent("home.welcome",lfront) />
+		<cfset lfront.loc = "<h1>Hello! I come from home.cfc admin_home()! I used to be admin.home but I was reassigned!</h1>" & callAction("employee.getEmployee") />
+		<cfset lfront.loc = callAction("home.welcome",lfront) />
 		<cfreturn lfront.loc />
 	</cffunction>
 

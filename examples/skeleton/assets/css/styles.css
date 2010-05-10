@@ -1,0 +1,77 @@
+html {
+	width: 100%;
+	margin: 0;
+}
+body {
+	background-color: #0084FF;
+	margin: 0;
+	padding: 0;
+	font: 1em Arial, Helvetica, sans-serif;
+}
+body #content {
+	margin: 0;
+	background-color: #DDF;
+}
+body #header {
+	background-color: #1D2855;
+	/*margin: 0 auto;*/
+	margin: 0 auto;
+	width: 100%;
+}
+body #header table {
+	font-size: 0.9em;
+	background-color: white;
+}
+h1 {
+	margin: 40px 0px 0px 10px;
+}
+h1 a {
+	background-image: url(../images/lightfront.gif);
+	background-position: center left;
+	background-repeat: no-repeat;
+	margin-top: 30px;
+	padding: 30px 0px 30px 110px;
+	height: 100px;
+	width: 400px;
+	color: #000;
+	text-decoration: none;
+}
+h1 a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+hr {
+	padding: 0;
+	border: 0;
+	color: #000;
+	background-color: #CCC;
+	height: 1px;
+}
+#googlegroup {
+	border: 0px;
+	background-color: #fff;
+	padding: 5px;
+	margin: 0px;
+}
+.googlegroupheader {
+	padding-left: 5px;
+	font-weight: bold;
+}
+.googlegroupcell {
+	padding-left: 5px;
+}
+#content {
+	background-color: #fff;
+}
+
+#main {
+	background-color: #0084FF;
+	margin: 0;
+}
+
+#success {
+	width: 900px;
+	margin: 0 auto;
+	padding: 10px;
+	background-color: #E0E0FF;
+}

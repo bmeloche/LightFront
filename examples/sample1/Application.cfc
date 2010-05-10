@@ -5,7 +5,7 @@
 	File: Application.cfc
 	Description: Now that there's a skeleton, this Application.cfc has been stripped down to show only what's necessary to make the application work.
 --->
-<cfcomponent displayname="Application" extends="org.lightfront.lightfront" output="false" hint="I am the Application CFC. I am tied to Lightfront.">
+<cfcomponent displayname="Application" extends="lightfront" output="false" hint="I am the Application CFC. I am tied to Lightfront.">
 	<cfscript>
 		this.name = "lightfront_" & hash(getCurrentTemplatePath()) & hash(cgi.script_name);
 		this.applicationTimeout = createTimeSpan(2,0,0,0);
@@ -13,20 +13,20 @@
 		this.sessionTimeout = createTimeSpan(0,0,30,0);
 		this.cookieManagement = true;
 		this.setClientCookies = false;
-		this.mappings["/lf"] = expandPath(".");
+		this.mappings["/lfront"] = expandPath(".");
 	</cfscript>
 
 	<!--- PUBLIC FUNCTIONS --->
 	<cffunction name="onApplicationStart" returntype="void" access="public" output="false" hint="I start the application.">
 		<cfset structClear(application) />
-		<cfset this.lfLoadTime = getTickCount() />
-		<cfset application.thiswas = this />
+		<cfset this.lfrontLoadTime = getTickCount() />
 		<cfset application.lfront = structNew() />
 		<cfset application.lfront.settings = loadSettings(setCustomLightFrontSettings()) />
-		<cfset application.lfront.service = loadServices() />
+		<cfset application.lfront.initComponent = initComponent />
+		<cfset application.lfront.initService = initService />
 		<cfset application.lfront.ctrl = loadControllers() />
 		<cfset application.startTime = now() />
-		<cfset this.lfLoadTime = getTickCount() - this.lfLoadTime />
+		<cfset this.lfrontLoadTime = getTickCount() - this.lfrontLoadTime />
 	</cffunction>
 
 	<cffunction name="onApplicationEnd" returntype="void" access="public" output="false" hint="I end the application.">
@@ -43,28 +43,31 @@
 
 	<cffunction name="onRequestStart" returntype="boolean" access="public" output="true" hint="I run before any non-remote calls.">
 		<cfargument name="targetPage" type="string" required="true" />
-		<cfset var loc = structNew() />
 		<cfset request.attributes = structNew() />
-		<cfset request.eventResult = "" />
+		<cfset request.actionResult = "" />
 		<!--- Check to see if a reinit has been requested. --->
 		<cfif structKeyExists(url,application.lfront.settings.reload) AND url[application.lfront.settings.reload] EQ application.lfront.settings.reloadPassword>
 			<cfset onApplicationStart() />
 		</cfif>
-		<cfset loadLightFrontRequest() />
+		<!--- Add anything you see fit here. --->
 		<cfreturn true />
 	</cffunction>
 
 	<cffunction name="onRequest" output="true">
 		<cfargument name="targetPage" type="string" required="true" />
-		<cfcontent reset="true" />
+		<cfif isLightfront(arguments.targetPage)>
+			<cfset loadRequest() />
+		<cfelse>
+			<!--- Add any alternate types of requests here, if needed that will not follow Lightfront conventions. --->
+		</cfif>
 	</cffunction>
 
 	<cffunction name="onRequestEnd" returntype="void" output="true" hint="I run at the end of the request.">
-		<cfif structKeyExists(request,"eventResult")>
-			<cfset writeOutput(request.eventResult) />
+		<cfif structKeyExists(request,"actionResult")>
+			<cfset writeOutput(request.actionResult) />
 		</cfif>
-		<cfif structKeyExists(this,"lfLoadTime")>
-			<cfoutput>LightFront was reloaded in #this.lfLoadTime# ms #dateFormat(application.startTime)# #timeFormat(application.startTime)#</cfoutput>
+		<cfif structKeyExists(this,"lfrontLoadTime")>
+			<cfoutput>LightFront was reloaded in #this.lfrontLoadTime# ms #dateFormat(application.startTime)# #timeFormat(application.startTime)#</cfoutput>
 		</cfif>
 		<cfif allowDump()>
 			<cfoutput>LightFront Framework - Scope Dump</cfoutput>
@@ -81,32 +84,39 @@
 		<cfset var retBool = true />
 		<cfreturn retBool />
 	</cffunction>
+	<cffunction name="onError" returnType="void" output="false">
+		<cfargument name="exception" required="true">
+		<cfargument name="eventname" type="string" required="true">
+		<cfdump var="#arguments#"><cfabort>
+	</cffunction>
+
 	<cffunction name="allowDump" access="private" returntype="boolean" hint="Logic to check to see if a dump is allowed or not for this request.">
 		<cfreturn (structKeyExists(request.attributes,"dump") AND structKeyExists(application.lfront.settings,"dump") AND structKeyExists(application.lfront.settings.dump,"allow") AND application.lfront.settings.dump.allow EQ true AND structKeyExists(application.lfront.settings.dump,"password") AND request.attributes.dump EQ application.lfront.settings.dump.password) />
 	</cffunction>
 
 	<cffunction name="setCustomLightFrontSettings" access="private" returntype="struct" hint="I set LightFront application settings.">
 		<cfscript>
-			var lfs = structNew();
+			var settings = structNew();
 			/* applicationMode: The mode of your application. You should always specify this setting in your Application.cfc!
 			*  Allowed values:
 			*	development-reload = The application restarts on each request. Dump is always provided. Recommended if you're constantly updating the application.
 			*	development = The application restarts only when a reload is requested. Dump is always provided. This is the default setting.
 			*	testing = The application restarts only when a reload is requested. Dump is provided when a dump is requested. Recommended setting for large applications in development or testing.
 			*	production = Application restarts and dumps are only provided on the server or by specific IP subset. Restricted mode for security purposes.*/
-			lfs.applicationMode = "testing"; //You can reload and get dumps, but they are not automatically provided.
-			lfs.defaultClass = "home";
-			lfs.defaultMethod = "welcome";
-			lfs.preEvent = "layout.header";
-			lfs.postEvent = "layout.footer";
-			lfs.switch = structNew();
-			lfs.switch.switchVariable = "fuseaction"; //this will assign do to fuseaction.
-			lfs.switch.switchPage = "switch.cfm"; //the name of the switch file. This might be called fbx_switch.cfm if you are porting over a Fusebox app.
-			lfs.switch.switchRoot = "/lf/controller/switch/";
-			lfs.switch.switches = structNew();
-			lfs.switch.switches.switch = "";
-			lfs.switch.switches.test = "test/";
-			return lfs;
+			settings.applicationMode = "testing"; //You can reload and get dumps, but they are not automatically provided.
+			settings.defaultController = "home";
+			settings.defaultAction = "welcome";
+			settings.preAction = "layout.header";
+			settings.postAction = "layout.footer";
+			settings.serviceSuffix = "Service";
+			settings.switch = structNew();
+			settings.switch.switchVariable = "fuseaction"; //this will assign do to fuseaction.
+			settings.switch.switchPage = "switch.cfm"; //the name of the switch file. This might be called fbx_switch.cfm if you are porting over a Fusebox app.
+			settings.switch.switchDirectory = "/lfront/controller/switch/";
+			settings.switch.switches = structNew();
+			settings.switch.switches.switch = "";
+			settings.switch.switches.test = "test/";
+			return settings;
 		</cfscript>
 	</cffunction>
 

@@ -6,21 +6,24 @@
 	</head>
 <body>
 <div id="header">
-	<h1>The LightFront Framework</h1>
+	<div id="headertable">
+		<div style="float: left;"><a href="http://www.lightfront.org/"><img src="assets/images/lightfront.gif" align="middle" border="0" alt="The LightFront logo" /></a></div>
+		<div style="float: left;"><h1><a href="http://www.lightfront.org/">The LightFront Framework</a></h1></div>
+	</div>
 	<div id="navbar">
 		<div id="menu">
-			<a href="#getSetting('defaultPage')#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./?do=faq.faq">FAQ</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./?do=home.welcome">Welcome</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./?do=home.hello">Hello</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./?do=switch.hello">Switch Controllers</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="./?do=security.login">Call a View directly (login page)</a>
+			<a href="#link(getSetting('defaultAction'))#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="#link('faq.faq')#">FAQ</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="#link('home.welcome')#">Welcome</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="#link('home.hello')#">Hello</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="#link('switch.hello')#">Switch Controllers</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="#link('security.login')#">Call a View directly (login page)</a>
 		</div>
 		<div id="loginmenu">
 			<cfif isDefined("cookie") AND structKeyExists(cookie,"username")>
-				Welcome, #cookie.username# <a href="./?do=logout">Logout</a>
+				Welcome, #cookie.username# <a href="#link('logout')#">Logout</a>
 			<cfelse>
-				<a href="./?do=login">Login</a>
+				<a href="#link('login')#">Login</a>
 			</cfif>
 		</div>
 	</div>

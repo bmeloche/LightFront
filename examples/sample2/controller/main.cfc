@@ -1,7 +1,7 @@
-<cfcomponent displayname="main" extends="org.lightfront.lightfront" output="false" hint="home controller">
+<cfcomponent displayname="main" extends="lfront.lightfront" output="false" hint="home controller">
 
-	<cfset securityService = application.lfront.service.securityService.init() />
-	<cfset categoryService = application.lfront.service.categoryService.init() />
+	<cfset variables.securityService = initService("security.security") />
+	<cfset variables.categoryService = initService("category.category") />
 
 	<cffunction name="onMissingMethod" returntype="string" output="false">
 		<cfargument name="missingMethodName" type="string" required="true" hint="The name of the missing method." />
@@ -71,22 +71,30 @@
 	</cffunction>
 
 	<cffunction name="categories" returntype="string" output="false">
-		<cfset var local = structNew() />
-		<cfset local.categoryList = categoryService.getAllCategory() />
-		<cfreturn displayView("admin/categories",local) />
+		<cfset var loc = structNew() />
+		<cfset loc.categoryList = categoryService.getAllCategory() />
+		<cfreturn displayView("admin/categories",loc) />
 	</cffunction>
 
 	<cffunction name="editCategory" returntype="string" output="false">
-		<cfargument name="id" type="Numeric" default="0" />
-		<cfset var local = structNew() />
-		<cfset local.category = queryNew("id,categoryName","integer,varchar") />
+		<cfset var loc = structNew() />
+		<cfset loc.category = queryNew("id,categoryName","integer,varchar") />
 		<cfif structKeyExists(request.attributes,"id")>
 			<cfset arguments.id = request.attributes.id />
 		</cfif>
-		<cfif arguments.id NEQ 0>
-			<cfset local.category = categoryService.getCategory(ID=arguments.id) />
+		<cfif structKeyExists(arguments,"id") AND arguments.id NEQ 0>
+			<cfset loc.category = categoryService.getCategory(categoryID=arguments.args.id) />
+		<cfelse>
+			<cfset loc.category = categoryService.init(item={}) />
 		</cfif>
-		<cfreturn displayView("admin/editcategory",local) />
+		<cfreturn displayView("admin/editcategory",loc) />
 	</cffunction>
 
+	<cffunction name="doEditCategory" returntype="any" output="false">
+		<cfset var loc = structNew() />
+		<cfset loc.hasErrors = arrayNew(1) />
+		<cfset loc.editStruct = structNew() />
+		<cfset loc.category = categoryService.createCategory(arguments.args) />
+		<cfreturn relocate("admin.categories") />
+	</cffunction>
 </cfcomponent>

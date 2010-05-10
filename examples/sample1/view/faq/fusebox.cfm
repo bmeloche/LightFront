@@ -1,6 +1,6 @@
 <h2>I see that LightFront can support switch controllers, like Fusebox 2 &amp; 3 had. Does this mean that LightFront is 100% Fusebox 3 compatible?</h2>
 <p>No, LightFront isn't 100% Fusebox 3 compatible, and it's probably not 100% Fusebox 2 compatible, either.</p>
-<p>However, it's compatible with Fusebox 2, and you should be able to run a Fusebox 2 application easily with only a minimal amount of changes needed.</p>
-<p>One thing that isn't supported... well, not directly, anyway... is nested layouts in Fusebox 3. Now, because you can pass content into displayView(), you can achieve a similar functionality, but we know it's not 100% compatible.</p>
+<p>However, it's relatively compatible with Fusebox 2, and you should be able to run a Fusebox 2 application easily with only a minimal amount of changes needed.</p>
+<p>One thing that isn't supported... well, not directly, anyway... is nested layouts in Fusebox 3. Now, because you can pass content into displayView(), you can achieve a similar functionality using a postAction, but we know it's not 100% compatible.</p>
 <p>We aren't striving to make LightFront the next classic Fusebox. We want to support developers moving an application over to a CFC controller-based app, but to do it in the &quot;real world&quot; if you need to do things gradually or piecemeal. The goal is to make it possible to migrate from early Fusebox or &quot;Fuseboxian&quot; style to LightFront, but not to make it drag &amp; drop. You will have to do a little work, but hopefully not a lot of work.</p>
 <p>We're hoping we have volunteers who would like to try to port an old Fusebox app into LightFront and can let us know how it goes. We may add to the framework to help make it easier, or at least document how to do it.</p>
