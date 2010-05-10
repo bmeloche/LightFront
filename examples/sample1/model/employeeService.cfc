@@ -32,10 +32,10 @@
 
 	<cffunction name="makeArrays" access="public" returntype="array" hint="I get the employee as an array of objects.">
 		<cfargument name="tmpArray" type="array">
-		<cfset request.bar = arguments.tmpArray[1]>
 		<cfset var arrObjects = arrayNew(1) />
 		<cfset var tmpObj = "" />
 		<cfset var i = 0 />
+		<cfset request.bar = arguments.tmpArray[1]>
 		<cfloop from="1" to="#arrayLen(arguments.tmpArray)#" index="i">
 			<cfset tmpObj = createObject("component","employee").init(argumentCollection=arguments.tmpArray[i]) />
 			<cfset arrayAppend(arrObjects,tmpObj) />
